@@ -1,0 +1,18 @@
+apiVersion: notification.toolkit.fluxcd.io/v1beta3
+kind: Provider
+metadata:
+  name: discord
+  namespace: flux-system
+spec:
+  type: discord
+  secretRef:
+    name: discord-webhook-url
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: discord-webhook-url
+  namespace: flux-system
+type: Opaque
+stringData:
+  address: "https://discord.com/api/webhooks/CHANGE_ME"
