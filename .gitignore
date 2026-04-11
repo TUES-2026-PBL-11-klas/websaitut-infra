@@ -1,0 +1,2 @@
+# Do not commit actual secrets
+# secret.yaml files are placeholders — real values come from Vault
