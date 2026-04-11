@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: directus
+  namespace: directus
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: directus
+  template:
+    metadata:
+      labels:
+        app: directus
+    spec:
+      containers:
+        - name: directus
+          image: directus/directus:11
+          ports:
+            - containerPort: 8055
+          envFrom:
+            - configMapRef:
+                name: directus-config
+            - secretRef:
+                name: directus-credentials
