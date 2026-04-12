@@ -1,0 +1,48 @@
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageRepository
+metadata:
+  name: website
+  namespace: flux-system
+spec:
+  image: ghcr.io/tues-2026-pbl-11-klas/websaitut/website
+  interval: 1m
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImagePolicy
+metadata:
+  name: website
+  namespace: flux-system
+spec:
+  imageRepositoryRef:
+    name: website
+  filterTags:
+    pattern: '^(?P<ts>\d{14})-[a-f0-9]+$'
+    extract: '$ts'
+  policy:
+    alphabetical:
+      order: asc
+---
+apiVersion: image.toolkit.fluxcd.io/v1beta2
+kind: ImageUpdateAutomation
+metadata:
+  name: website
+  namespace: flux-system
+spec:
+  interval: 1m
+  sourceRef:
+    kind: GitRepository
+    name: flux-system
+  git:
+    checkout:
+      ref:
+        branch: main
+    commit:
+      author:
+        name: fluxbot
+        email: flux@tues.bg
+      messageTemplate: 'chore: update website to {{.Changed.NewTag}}'
+    push:
+      branch: main
+  update:
+    path: ./apps/website
+    strategy: Setters
