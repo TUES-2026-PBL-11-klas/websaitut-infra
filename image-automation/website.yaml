@@ -42,7 +42,8 @@ spec:
       author:
         name: fluxbot
         email: flux@tues.bg
-      messageTemplate: "chore: update website to {{.Changed.NewTag}}"
+      messageTemplate: |
+        chore: update website{{range .Changed.Objects}} to {{.NewTag}}{{end}}
     push:
       branch: main
   update:
