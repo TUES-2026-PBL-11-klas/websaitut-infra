@@ -13,9 +13,11 @@ spec:
       labels:
         app: website
     spec:
+      imagePullSecrets:
+        - name: ghcr-auth
       containers:
         - name: website
-          image: ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260412000000-0000000 # {"$imagepolicy": "flux-system:website"}
+          image: ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260412183809-4b1d8dd # {"$imagepolicy": "flux-system:website"}
           ports:
             - containerPort: 3000
           env:
