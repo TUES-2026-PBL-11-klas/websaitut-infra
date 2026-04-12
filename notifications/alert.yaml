@@ -12,3 +12,9 @@ spec:
       name: "*"
     - kind: GitRepository
       name: "*"
+    - kind: ImageRepository
+      name: "*"
+    - kind: ImagePolicy
+      name: "*"
+    - kind: ImageUpdateAutomation
+      name: "*"
