@@ -3,4 +3,5 @@ kind: Kustomization
 resources:
   - vault-auth-sa.yaml
   - vault-auth-token.yaml
+  - vault-auth-rbac.yaml
   - cluster-secret-store.yaml
