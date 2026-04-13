@@ -41,6 +41,8 @@ spec:
   path: ./infrastructure/postgres
   prune: true
   wait: true
+  dependsOn:
+    - name: external-secrets
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -55,6 +57,8 @@ spec:
   path: ./infrastructure/minio
   prune: true
   wait: true
+  dependsOn:
+    - name: external-secrets
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
@@ -70,6 +74,7 @@ spec:
   prune: true
   wait: true
   dependsOn:
+    - name: external-secrets
     - name: infrastructure-postgres
     - name: infrastructure-minio
 ---
@@ -87,6 +92,7 @@ spec:
   prune: true
   wait: true
   dependsOn:
+    - name: external-secrets
     - name: infrastructure-directus
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -102,6 +108,7 @@ spec:
   path: ./image-automation
   prune: true
   dependsOn:
+    - name: external-secrets
     - name: apps-website
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
@@ -116,3 +123,5 @@ spec:
     name: flux-system
   path: ./notifications
   prune: true
+  dependsOn:
+    - name: external-secrets

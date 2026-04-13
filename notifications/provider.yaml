@@ -7,12 +7,3 @@ spec:
   type: discord
   secretRef:
     name: discord-webhook-url
----
-apiVersion: v1
-kind: Secret
-metadata:
-  name: discord-webhook-url
-  namespace: flux-system
-type: Opaque
-stringData:
-  address: "https://discord.com/api/webhooks/CHANGE_ME"
