@@ -24,3 +24,8 @@ spec:
         namespace: flux-system
   values:
     installCRDs: true
+    rbac:
+      create: true
+    serviceAccount:
+      create: true
+      name: external-secrets
