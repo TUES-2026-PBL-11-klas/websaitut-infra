@@ -1,4 +1,3 @@
-# external-secrets/vault-auth-sa.yaml
 apiVersion: v1
 kind: ServiceAccount
 metadata:
