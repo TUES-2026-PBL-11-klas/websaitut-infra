@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: directus
+  namespace: directus
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: directus.vdemirev.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: directus
+                port:
+                  number: 8055
+  tls:
+    - hosts:
+        - directus.vdemirev.com
+      secretName: directus-tls
