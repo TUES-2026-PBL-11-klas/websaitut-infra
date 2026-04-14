@@ -19,7 +19,7 @@ metadata:
 spec:
   interval: 10m
   sourceRef:
-    kind: GitRepository
+    kind: GitRepositoryf
     name: flux-system
   path: ./infrastructure/cert-manager
   prune: true
@@ -41,6 +41,10 @@ spec:
   prune: true
   dependsOn:
     - name: cert-manager
+  healthChecks:
+    - apiVersion: cert-manager.io/v1
+      kind: ClusterIssuer
+      name: letsencrypt
 ---
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
