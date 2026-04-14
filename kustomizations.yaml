@@ -23,6 +23,7 @@ spec:
     name: flux-system
   path: ./infrastructure/cert-manager
   prune: true
+  wait: true
   dependsOn:
     - name: traefik
 ---
