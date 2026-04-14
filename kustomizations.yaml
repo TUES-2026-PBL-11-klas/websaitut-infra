@@ -44,6 +44,7 @@ spec:
     name: flux-system
   path: ./infrastructure/cert-manager-issuer
   prune: true
+  force: true
   dependsOn:
     - name: cert-manager
 ---
