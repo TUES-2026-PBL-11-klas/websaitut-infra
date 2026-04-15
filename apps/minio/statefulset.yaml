@@ -6,9 +6,8 @@ metadata:
   annotations:
     secret.reloader.stakater.com/reload: "minio-credentials"
 spec:
+  serviceName: minio
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app: minio
@@ -52,7 +51,12 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /data
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: minio-data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 3Gi

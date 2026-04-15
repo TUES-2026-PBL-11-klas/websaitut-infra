@@ -6,9 +6,8 @@ metadata:
   annotations:
     secret.reloader.stakater.com/reload: "postgres-credentials"
 spec:
+  serviceName: postgres
   replicas: 1
-  strategy:
-    type: Recreate
   selector:
     matchLabels:
       app: postgres
@@ -45,7 +44,12 @@ spec:
             - name: data
               mountPath: /var/lib/postgresql/data
               subPath: pgdata
-      volumes:
-        - name: data
-          persistentVolumeClaim:
-            claimName: postgres-data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 1Gi
