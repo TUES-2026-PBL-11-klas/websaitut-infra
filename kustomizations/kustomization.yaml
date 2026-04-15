@@ -12,3 +12,4 @@ resources:
   - website.yaml
   - image-automation.yaml
   - notifications.yaml
+  - reloader.yaml
