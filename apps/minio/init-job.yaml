@@ -10,7 +10,7 @@ spec:
       restartPolicy: OnFailure
       initContainers:
         - name: wait-for-minio
-          image: busybox
+          image: busybox:1.37
           command:
             - sh
             - -c
@@ -21,7 +21,7 @@ spec:
               done
       containers:
         - name: mc
-          image: minio/mc:latest
+          image: minio/mc:RELEASE.2025-09-07T16-13-09Z
           command:
             - /bin/sh
             - -c
