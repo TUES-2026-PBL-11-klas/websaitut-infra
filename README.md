@@ -16,9 +16,8 @@ export GITHUB_TOKEN=<your-fine-grained-pat>
 flux bootstrap github \
   --owner=TUES-2026-PBL-11-klas \
   --repository=websaitut-infra \
-  --path=. \
-  --personal=false \
-  --components="source-controller,kustomize-controller,notification-controller"
+  --path=kustomizations \
+  --personal=false
 ```
 
 After bootstrap, update the Discord webhook URL:
@@ -33,19 +32,28 @@ kubectl -n flux-system create secret generic discord-webhook-url \
 
 ```
 .
-├── kustomizations.yaml       # Flux Kustomization wiring
+├── kustomizations/           # Flux Kustomization CRs (entry point)
 ├── infrastructure/
+│   ├── traefik/              # Ingress controller
+│   ├── cert-manager/         # TLS certificate management
+│   ├── cert-manager-issuer/  # Let's Encrypt ClusterIssuer
+├── external-secrets/
+│   ├── operator/             # External Secrets Operator
+│   └── store/                # Vault ClusterSecretStore
+├── apps/
 │   ├── postgres/             # PostgreSQL 16
 │   ├── minio/                # S3-compatible object storage
-│   └── directus/             # Headless CMS
-├── apps/
+│   ├── directus/             # Headless CMS
 │   └── website/              # Next.js frontend
+├── image-automation/         # Flux image update automation
 └── notifications/            # Discord alerts
 ```
 
 ## Dependency chain
 
 ```
-postgres ─┬─► directus ─► website
-minio ────┘
+traefik → cert-manager → cert-manager-issuer
+external-secrets-operator → external-secrets (vault store)
+external-secrets → postgres ─┬─► directus ─► website
+                   minio ────┘
 ```
