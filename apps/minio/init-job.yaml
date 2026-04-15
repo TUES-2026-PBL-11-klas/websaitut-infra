@@ -1,0 +1,46 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: minio-init
+  namespace: minio
+spec:
+  template:
+    spec:
+      restartPolicy: OnFailure
+      containers:
+        - name: mc
+          image: minio/mc:latest
+          command:
+            - /bin/sh
+            - -c
+            - |
+              mc alias set myminio http://minio.minio.svc.cluster.local:9000 \
+                "$MINIO_ROOT_USER" "$MINIO_ROOT_PASSWORD"
+
+              mc mb --ignore-existing myminio/directus
+
+              mc admin user svcacct info myminio "$DIRECTUS_ACCESS_KEY" 2>/dev/null || \
+                mc admin user svcacct add myminio "$MINIO_ROOT_USER" \
+                  --access-key "$DIRECTUS_ACCESS_KEY" \
+                  --secret-key "$DIRECTUS_SECRET_KEY"
+          env:
+            - name: MINIO_ROOT_USER
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: MINIO_ROOT_USER
+            - name: MINIO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: minio-credentials
+                  key: MINIO_ROOT_PASSWORD
+            - name: DIRECTUS_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-directus-credentials
+                  key: DIRECTUS_ACCESS_KEY
+            - name: DIRECTUS_SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: minio-directus-credentials
+                  key: DIRECTUS_SECRET_KEY
