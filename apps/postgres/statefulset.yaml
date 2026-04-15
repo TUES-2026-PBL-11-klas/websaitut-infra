@@ -1,8 +1,10 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: postgres
   namespace: postgres
+  annotations:
+    secret.reloader.stakater.com/reload: "postgres-credentials"
 spec:
   replicas: 1
   strategy:
