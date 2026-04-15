@@ -11,6 +11,5 @@ spec:
   secretRef:
     name: github-webhook-token
   resources:
-    - apiVersion: source.toolkit.fluxcd.io/v1
-      kind: GitRepository
+    - kind: GitRepository
       name: flux-system
