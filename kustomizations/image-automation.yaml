@@ -8,7 +8,7 @@ spec:
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./image-automation
+  path: ./infrastructure/image-automation
   prune: true
   dependsOn:
     - name: external-secrets
