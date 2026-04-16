@@ -1,14 +1,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: notifications
+  name: cert-manager-issuer
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./notifications
+  path: ./infrastructure/ingress/cert-manager-issuer
   prune: true
+  force: true
   dependsOn:
-    - name: external-secrets
+    - name: cert-manager

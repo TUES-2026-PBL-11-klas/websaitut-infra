@@ -1,15 +1,16 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - traefik.yaml
-  - cert-manager.yaml
-  - cert-manager-issuer.yaml
-  - external-secrets-operator.yaml
-  - external-secrets.yaml
-  - postgres.yaml
-  - minio.yaml
-  - directus.yaml
-  - website.yaml
-  - image-automation.yaml
-  - notifications.yaml
-  - reloader.yaml
+  - ingress-traefik.yaml
+  - ingress-cert-manager.yaml
+  - ingress-cert-manager-issuer.yaml
+  - secrets-operator.yaml
+  - secrets-store.yaml
+  - secrets-reloader.yaml
+  - gitops-image-automation.yaml
+  - gitops-receiver.yaml
+  - apps-postgres.yaml
+  - apps-minio.yaml
+  - apps-directus.yaml
+  - apps-website.yaml
+  - jobs-minio-init.yaml
