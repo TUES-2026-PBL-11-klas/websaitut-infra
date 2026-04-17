@@ -23,6 +23,9 @@ spec:
           ports:
             - containerPort: 3000
           env:
+            - name: BACKEND_URL
+              value: http://directus.directus.svc.cluster.local:8055
+          envFrom:
             - secretRef:
                 name: google-calendar
           startupProbe:
