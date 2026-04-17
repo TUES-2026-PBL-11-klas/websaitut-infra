@@ -14,4 +14,4 @@ spec:
   dependsOn:
     - name: observability-prometheus
     - name: observability-logging
-    - name: ingress-cert-manager-issuer
+    - name: cert-manager-issuer
