@@ -1,18 +1,3 @@
-# Grafana Unified Alerting has two modes:
-#   1. Grafana-managed alert rules (defined in Grafana, run by Grafana)
-#   2. Datasource-managed (Prometheus rules, alerts come in via the Alertmanager
-#      API of the datasource)
-#
-# We use BOTH pieces here:
-#   - The PrometheusRule in observability/prometheus/alerts/rules.yaml defines
-#     the conditions. Prometheus evaluates them and exposes firing alerts.
-#   - Grafana periodically polls Prometheus for those alerts and routes them
-#     via the contact point and notification policy defined below.
-#
-# The Discord webhook URL is injected via env var GF_DISCORD_WEBHOOK_URL, which
-# Grafana substitutes into the contactPoints file at startup using its built-in
-# $__env{} syntax.
-
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -31,37 +16,12 @@ data:
               url: ${GF_DISCORD_WEBHOOK_URL}
               use_discord_username: false
               avatar_url: ""
-              title: |
-                {{ if eq .Status "firing" }}🔥{{ else }}✅{{ end }} [{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}
+              title: "[{{ .Status | toUpper }}] {{ .CommonLabels.alertname }}"
               message: |
                 {{ range .Alerts }}
                 **{{ .Labels.severity | toUpper }}** — {{ .Annotations.summary }}
-
                 {{ .Annotations.description }}
-
-                {{ range .Labels.SortedPairs }}• `{{ .Name }}` = `{{ .Value }}`
-                {{ end }}
                 {{ end }}
   policies.yaml: |
     apiVersion: 1
-    policies:
-      - orgId: 1
-        receiver: discord
-        group_by: ["alertname", "severity"]
-        group_wait: 30s
-        group_interval: 5m
-        repeat_interval: 12h
-        routes:
-          - receiver: discord
-            matchers:
-              - severity = critical
-            group_wait: 10s
-            repeat_interval: 1h
-          - receiver: discord
-            matchers:
-              - severity = warning
-            repeat_interval: 6h
-          - receiver: discord
-            matchers:
-              - severity = info
-            repeat_interval: 24h
+    # Empty — Grafana uses its default policy tree
