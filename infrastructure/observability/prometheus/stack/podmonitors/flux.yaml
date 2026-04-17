@@ -1,12 +1,5 @@
-# Flux controllers expose Prometheus metrics on port 8080 automatically.
-# These ServiceMonitors scrape all four controllers, giving us:
-#   - gotk_reconcile_duration_seconds  (reconciliation latency histogram)
-#   - gotk_reconcile_condition  (Ready/Stalled/Reconciling per resource)
-#   - gotk_suspend_status  (which resources are suspended)
-#   - controller_runtime_* (Go runtime metrics, leader election, etc.)
----
 apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
+kind: PodMonitor
 metadata:
   name: flux-system
   namespace: flux-system
@@ -27,6 +20,6 @@ spec:
           - notification-controller
           - image-reflector-controller
           - image-automation-controller
-  endpoints:
+  podMetricsEndpoints:
     - port: http-prom
       interval: 60s
