@@ -27,13 +27,13 @@ spec:
           livenessProbe:
             httpGet:
               path: /livez
-              port: telemetry
+              port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 5
           readinessProbe:
             httpGet:
               path: /readyz
-              port: telemetry
+              port: metrics
             initialDelaySeconds: 5
             timeoutSeconds: 5
           resources:
