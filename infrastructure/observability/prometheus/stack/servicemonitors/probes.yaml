@@ -1,0 +1,50 @@
+# Probe CRs instruct Prometheus to have blackbox-exporter ping these URLs.
+# Each creates a probe_* metric series keyed by instance=URL.
+#
+# probe_success          — 1 if probe succeeded, 0 otherwise
+# probe_duration_seconds — how long the full probe took
+# probe_http_status_code — HTTP status code returned
+# probe_ssl_earliest_cert_expiry — TLS cert expiry timestamp
+---
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: external-endpoints
+  namespace: prometheus
+  labels:
+    app.kubernetes.io/name: blackbox-exporter
+spec:
+  interval: 60s
+  scrapeTimeout: 10s
+  module: http_2xx
+  prober:
+    url: blackbox-exporter.prometheus.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - https://website.vdemirev.com
+        - https://directus.vdemirev.com
+      labels:
+        probe: external
+---
+# MinIO console returns 403 on / when not logged in, which is still "healthy"
+# from an availability standpoint. Use the lenient module.
+apiVersion: monitoring.coreos.com/v1
+kind: Probe
+metadata:
+  name: external-endpoints-auth
+  namespace: prometheus
+  labels:
+    app.kubernetes.io/name: blackbox-exporter
+spec:
+  interval: 60s
+  scrapeTimeout: 10s
+  module: http_2xx_no_tls_check
+  prober:
+    url: blackbox-exporter.prometheus.svc.cluster.local:9115
+  targets:
+    staticConfig:
+      static:
+        - https://minio.vdemirev.com
+      labels:
+        probe: external

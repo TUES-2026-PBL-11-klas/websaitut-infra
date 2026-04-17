@@ -25,5 +25,12 @@ spec:
               permanent: true
       websecure:
         hostPort: 443
+    metrics:
+      prometheus:
+        enabled: true
+        service:
+          enabled: true
+        serviceMonitor:
+          enabled: false
     service:
       type: ClusterIP

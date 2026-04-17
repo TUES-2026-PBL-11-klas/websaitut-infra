@@ -1,0 +1,55 @@
+apiVersion: monitoring.coreos.com/v1
+kind: Prometheus
+metadata:
+  name: prometheus
+  namespace: prometheus
+spec:
+  replicas: 1
+  serviceAccountName: prometheus
+  image: quay.io/prometheus/prometheus:v3.6.0
+
+  # Discover ServiceMonitors, PodMonitors, and PrometheusRules across all
+  # namespaces. {} means "match all" — no label selector filter.
+  serviceMonitorSelector: {}
+  serviceMonitorNamespaceSelector: {}
+  podMonitorSelector: {}
+  podMonitorNamespaceSelector: {}
+  ruleSelector: {}
+  ruleNamespaceSelector: {}
+  probeSelector: {}
+  probeNamespaceSelector: {}
+
+  # 14-day retention, capped by disk size (whichever hits first).
+  retention: 14d
+  retentionSize: 4GB
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 512Mi
+    limits:
+      cpu: 1000m
+      memory: 2Gi
+
+  # Persistent volume for time-series data.
+  storage:
+    volumeClaimTemplate:
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 5Gi
+
+  # Security context — run as non-root.
+  securityContext:
+    runAsNonRoot: true
+    runAsUser: 1000
+    fsGroup: 2000
+
+  # Give Prometheus a URL so generated alert links point somewhere useful.
+  # Prometheus is internal-only, so this is just for self-reference.
+  externalUrl: http://prometheus.prometheus.svc.cluster.local:9090
+
+  # Don't enforce a namespace label on alerts; we want alerts from any namespace.
+  enforcedNamespaceLabel: ""

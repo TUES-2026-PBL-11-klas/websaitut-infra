@@ -1,0 +1,50 @@
+# MinIO exposes cluster metrics at /minio/v2/metrics/cluster, protected by a
+# JWT bearer token. The token is generated once with `mc admin prometheus
+# generate` and stored in Vault at secret/minio property=prometheus_token.
+#
+# Both ExternalSecret and ServiceMonitor live in prometheus namespace because
+# bearerTokenSecret can only reference secrets in the same namespace as the
+# ServiceMonitor. namespaceSelector below tells Prometheus where to find the
+# actual MinIO service to scrape.
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: minio-prometheus-token
+  namespace: prometheus
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: minio-prometheus-token
+    creationPolicy: Owner
+  data:
+    - secretKey: token
+      remoteRef:
+        key: minio
+        property: prometheus_token
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: minio
+  namespace: prometheus
+  labels:
+    app.kubernetes.io/name: minio
+spec:
+  namespaceSelector:
+    matchNames:
+      - minio
+  selector:
+    matchLabels:
+      app: minio
+  endpoints:
+    - port: api
+      interval: 60s
+      scheme: http
+      path: /minio/v2/metrics/cluster
+      bearerTokenSecret:
+        name: minio-prometheus-token
+        key: token

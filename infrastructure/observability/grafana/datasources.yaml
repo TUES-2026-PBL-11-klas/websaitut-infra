@@ -1,0 +1,30 @@
+# Grafana reads this ConfigMap on startup and auto-configures the datasources.
+# No manual clicking in the UI required. Passwords/tokens would be referenced
+# as env vars, but both our datasources are internal cluster services with no
+# auth, so plain URLs suffice.
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: grafana
+data:
+  datasources.yaml: |
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus.prometheus.svc.cluster.local:9090
+        isDefault: true
+        editable: false
+        jsonData:
+          timeInterval: "30s"
+          # Grafana can use Prometheus's own /api/v1/alerts for alert state,
+          # but we're using Grafana Unified Alerting, so leave this alone.
+      - name: Loki
+        type: loki
+        access: proxy
+        url: http://loki.logging.svc.cluster.local:3100
+        editable: false
+        jsonData:
+          maxLines: 1000

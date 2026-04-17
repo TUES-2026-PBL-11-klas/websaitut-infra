@@ -14,3 +14,7 @@ resources:
   - apps-directus.yaml
   - apps-website.yaml
   - jobs-minio-init.yaml
+  - observability-grafana.yaml
+  - observability-logging.yaml
+  - observability-prometheus.yaml
+  - observability-prometheus-operator.yaml
