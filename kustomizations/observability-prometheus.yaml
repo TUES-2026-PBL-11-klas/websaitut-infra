@@ -13,4 +13,4 @@ spec:
   wait: true
   dependsOn:
     - name: observability-prometheus-operator
-    - name: secrets-store
+    - name: external-secrets
