@@ -71,9 +71,6 @@ spec:
               value: "false"
             - name: GF_USERS_ALLOW_ORG_CREATE
               value: "false"
-            # Let Grafana expand env vars inside provisioning YAML
-            - name: GF_FEATURE_TOGGLES_ENABLE
-              value: "provisioning"
           livenessProbe:
             httpGet:
               path: /api/health
