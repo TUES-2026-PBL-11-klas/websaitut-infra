@@ -12,6 +12,7 @@ data:
     apiVersion: 1
     datasources:
       - name: Prometheus
+        uid: prometheus
         type: prometheus
         access: proxy
         url: http://prometheus.prometheus.svc.cluster.local:9090
@@ -22,6 +23,7 @@ data:
           # Grafana can use Prometheus's own /api/v1/alerts for alert state,
           # but we're using Grafana Unified Alerting, so leave this alone.
       - name: Loki
+        uid: loki
         type: loki
         access: proxy
         url: http://loki.logging.svc.cluster.local:3100

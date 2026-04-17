@@ -43,12 +43,20 @@ fetch_one() {
   # Community dashboards reference ${DS_PROMETHEUS} or similar templated vars;
   # we hard-code them to our datasource names.
   if [ "$ds_type" = "prometheus" ]; then
-    sed -i.bak 's/"\${DS_PROMETHEUS}"/"Prometheus"/g; s/"\${datasource}"/"Prometheus"/g' "$out"
+    # Match any ${DS_*PROMETHEUS*} variant (DS_PROMETHEUS, DS_SIGNCL-PROMETHEUS, etc.)
+    sed -i.bak -E '
+      s/"\$\{DS_[^}]*PROMETHEUS[^}]*\}"/"Prometheus"/g
+      s/"\$\{datasource\}"/"Prometheus"/g
+      s/"uid":[[:space:]]*"[Pp]rometheus"/"uid": "prometheus"/g
+      s/"uid":[[:space:]]*"\$\{DS_[^}]*\}"/"uid": "prometheus"/g
+    ' "$out"
   else
-    sed -i.bak 's/"\${DS_LOKI}"/"Loki"/g' "$out"
+    sed -i.bak -E '
+      s/"\$\{DS_[^}]*LOKI[^}]*\}"/"Loki"/g
+      s/"uid":[[:space:]]*"[Ll]oki"/"uid": "loki"/g
+    ' "$out"
   fi
   rm -f "${out}.bak"
-
   # Wrap as ConfigMap.
   cat > "$configmap" <<EOF
 apiVersion: v1

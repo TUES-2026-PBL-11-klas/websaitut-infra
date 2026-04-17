@@ -68,7 +68,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "gridPos": {
             "h": 8,
@@ -171,7 +171,7 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#299c46"
           ],
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -261,7 +261,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "gridPos": {
             "h": 6,
@@ -346,7 +346,7 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "fill": 1,
           "gridPos": {
             "h": 6,
@@ -436,7 +436,7 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "decimals": 0,
           "format": "none",
           "gauge": {
@@ -532,7 +532,7 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -612,7 +612,7 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#299c46"
           ],
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -706,7 +706,7 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#299c46"
           ],
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "decimals": 2,
           "format": "dtdurations",
           "gauge": {
@@ -803,7 +803,7 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "format": "s",
           "gauge": {
             "maxValue": 100,
@@ -885,7 +885,7 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_SIGNCL-PROMETHEUS}",
+          "datasource": "Prometheus",
           "format": "s",
           "gauge": {
             "maxValue": 100,
@@ -1059,7 +1059,7 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_SIGNCL-PROMETHEUS}",
+            "datasource": "Prometheus",
             "hide": 0,
             "includeAll": true,
             "label": null,
