@@ -12,6 +12,8 @@ spec:
       app: directus
   template:
     metadata:
+      annotations:
+        reloader.stakater.com/auto: "directus-credentials"
       labels:
         app: directus
     spec:

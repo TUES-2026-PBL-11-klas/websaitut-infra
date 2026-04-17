@@ -10,6 +10,8 @@ spec:
       app: website
   template:
     metadata:
+      annotations:
+        reloader.stakater.com/auto: "auto"
       labels:
         app: website
     spec:
