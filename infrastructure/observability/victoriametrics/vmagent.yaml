@@ -1,0 +1,22 @@
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMAgent
+metadata:
+  name: victoria-metrics
+  namespace: vm
+spec:
+  remoteWrite:
+    - url: http://vmsingle-victoria-metrics:8429/api/v1/write
+  # Select only VM-native CRDs — no ServiceMonitor/PodMonitor/Probe.
+  serviceScrapeSelector: {}
+  serviceScrapeNamespaceSelector: {}
+  podScrapeSelector: {}
+  podScrapeNamespaceSelector: {}
+  probeSelector: {}
+  probeNamespaceSelector: {}
+  resources:
+    requests:
+      cpu: 50m
+      memory: 64Mi
+    limits:
+      cpu: 200m
+      memory: 256Mi

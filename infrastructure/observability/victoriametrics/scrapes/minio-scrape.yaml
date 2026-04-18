@@ -1,0 +1,41 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: minio-prometheus-token
+  namespace: vm
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: minio-prometheus-token
+    creationPolicy: Owner
+  data:
+    - secretKey: token
+      remoteRef:
+        key: minio
+        property: prometheus_token
+---
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: minio
+  namespace: vm
+  labels:
+    app.kubernetes.io/name: minio
+spec:
+  namespaceSelector:
+    matchNames:
+      - minio
+  selector:
+    matchLabels:
+      app: minio
+  endpoints:
+    - port: api
+      interval: 60s
+      scheme: http
+      path: /minio/v2/metrics/cluster
+      bearerTokenSecret:
+        name: minio-prometheus-token
+        key: token

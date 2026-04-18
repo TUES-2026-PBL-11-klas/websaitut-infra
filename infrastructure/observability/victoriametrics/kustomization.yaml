@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - vmsingle.yaml
+  - vmagent.yaml
+  - vmalert.yaml
+  - discord-relay.yaml
+  - discord-webhook-secret.yaml
+  - limitrange.yaml
+  - rules/vmrule.yaml
+  - scrapes/cert-manager-scrape.yaml
+  - scrapes/kube-state-metrics-scrape.yaml
+  - scrapes/minio-scrape.yaml
+  - scrapes/node-exporter-scrape.yaml
+  - scrapes/postgres-exporter-scrape.yaml
+  - scrapes/traefik-scrape.yaml
+  - scrapes/flux-scrape.yaml
+  - scrapes/external-probes.yaml

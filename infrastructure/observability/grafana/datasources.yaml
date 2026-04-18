@@ -11,21 +11,21 @@ data:
   datasources.yaml: |
     apiVersion: 1
     datasources:
-      - name: Prometheus
+      - name: VictoriaMetrics
         uid: prometheus
         type: prometheus
         access: proxy
-        url: http://prometheus.prometheus.svc.cluster.local:9090
+        url: http://vmsingle-victoria-metrics.vm.svc.cluster.local:8429
         isDefault: true
         editable: false
         jsonData:
           timeInterval: "30s"
-          manageAlerts: true
-      - name: Loki
-        uid: loki
-        type: loki
+          manageAlerts: false
+      - name: VictoriaLogs
+        uid: victorialogs
+        type: victoriametrics-logs-datasource
         access: proxy
-        url: http://loki.logging.svc.cluster.local:3100
+        url: http://victorialogs.vm.svc.cluster.local:9428
         editable: false
         jsonData:
           maxLines: 1000

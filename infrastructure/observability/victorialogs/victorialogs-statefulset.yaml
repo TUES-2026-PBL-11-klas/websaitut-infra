@@ -1,0 +1,66 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: victorialogs
+  namespace: vm
+  labels:
+    app.kubernetes.io/name: victorialogs
+spec:
+  serviceName: victorialogs
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: victorialogs
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: victorialogs
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
+      containers:
+        - name: victorialogs
+          # Check https://hub.docker.com/r/victoriametrics/victoria-logs/tags for latest stable.
+          image: docker.io/victoriametrics/victoria-logs:v0.28.0-victorialogs
+          args:
+            - --storageDataPath=/victoria-logs-data
+            - --httpListenAddr=:9428
+            - --retentionPeriod=72h
+          ports:
+            - name: http
+              containerPort: 9428
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 15
+            timeoutSeconds: 5
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+            timeoutSeconds: 3
+          resources:
+            requests:
+              cpu: 50m
+              memory: 128Mi
+            limits:
+              cpu: 300m
+              memory: 384Mi
+          volumeMounts:
+            - name: data
+              mountPath: /victoria-logs-data
+  volumeClaimTemplates:
+    - metadata:
+        name: data
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        storageClassName: local-path
+        resources:
+          requests:
+            storage: 2Gi
