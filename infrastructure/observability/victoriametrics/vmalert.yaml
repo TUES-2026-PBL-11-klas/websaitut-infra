@@ -9,7 +9,7 @@ spec:
   datasource:
     url: http://vmsingle-victoria-metrics:8429
   notifiers:
-    - url: http://discord-relay:8080/webhook
+    - url: http://vmalertmanager-victoria-metrics:9093
   ruleSelector: {}
   ruleNamespaceSelector: {}
   resources:

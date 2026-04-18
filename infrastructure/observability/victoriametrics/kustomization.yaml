@@ -4,7 +4,7 @@ resources:
   - vmsingle.yaml
   - vmagent.yaml
   - vmalert.yaml
-  - discord-relay
+  - alertmanager
   - limitrange.yaml
   - rules/vmrule.yaml
   - scrapes/cert-manager-scrape.yaml
