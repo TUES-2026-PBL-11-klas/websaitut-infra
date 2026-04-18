@@ -23,7 +23,7 @@ spec:
       containers:
         - name: victorialogs
           # Check https://hub.docker.com/r/victoriametrics/victoria-logs/tags for latest stable.
-          image: docker.io/victoriametrics/victoria-logs:v0.28.0-victorialogs
+          image: docker.io/victoriametrics/victoria-logs:v1.50.0-victorialogs
           args:
             - --storageDataPath=/victoria-logs-data
             - --httpListenAddr=:9428

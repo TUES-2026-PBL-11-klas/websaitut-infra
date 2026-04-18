@@ -9,3 +9,4 @@ resources:
   - traefik-scrape.yaml
   - flux-scrape.yaml
   - external-probes.yaml
+  - victorialogs-scrape.yaml
