@@ -5,3 +5,4 @@ namespace: vm
 resources:
   - secrets.yaml
   - vmalertmanager.yaml
+  - ingress.yaml

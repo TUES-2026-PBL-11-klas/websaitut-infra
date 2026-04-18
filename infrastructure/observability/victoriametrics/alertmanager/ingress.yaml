@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: alertmanager
+  namespace: vm
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: alertmanager.vdemirev.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vmalertmanager-victoria-metrics
+                port:
+                  number: 9093
+  tls:
+    - hosts: [alertmanager.vdemirev.com]
+      secretName: alertmanager-tls
