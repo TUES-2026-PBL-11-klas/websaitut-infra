@@ -19,8 +19,9 @@ data:
         def do_POST(self):
             n = int(self.headers.get("Content-Length", 0))
             data = json.loads(self.rfile.read(n))
+            alerts = data if isinstance(data, list) else data.get("alerts", [])
             embeds = []
-            for a in data.get("alerts", []):
+            for a in alerts:
                 labels = a.get("labels", {})
                 anns = a.get("annotations", {})
                 embeds.append({
