@@ -24,4 +24,10 @@ data:
                 {{ end }}
   policies.yaml: |
     apiVersion: 1
-    # Empty — Grafana uses its default policy tree
+    policies:
+      - orgId: 1
+        receiver: discord
+        group_by: ['grafana_folder', 'alertname']
+        group_wait: 30s
+        group_interval: 5m
+        repeat_interval: 4h
