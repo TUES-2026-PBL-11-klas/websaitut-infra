@@ -20,8 +20,7 @@ data:
         editable: false
         jsonData:
           timeInterval: "30s"
-          # Grafana can use Prometheus's own /api/v1/alerts for alert state,
-          # but we're using Grafana Unified Alerting, so leave this alone.
+          manageAlerts: true
       - name: Loki
         uid: loki
         type: loki
@@ -30,4 +29,3 @@ data:
         editable: false
         jsonData:
           maxLines: 1000
-          manageAlerts: true
