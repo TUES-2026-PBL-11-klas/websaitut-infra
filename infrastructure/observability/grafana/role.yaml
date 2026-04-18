@@ -1,0 +1,10 @@
+# dashboard-sidecar needs to list/watch ConfigMaps to pick up dashboards
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: grafana-dashboard-watcher
+  namespace: grafana
+rules:
+  - apiGroups: [""]
+    resources: ["configmaps"]
+    verbs: ["get", "list", "watch"]

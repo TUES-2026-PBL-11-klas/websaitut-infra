@@ -17,6 +17,8 @@ data:
         orgId: 1
     datasources:
       - name: VictoriaMetrics
+        # uid kept as "prometheus" so community Prometheus dashboards that
+        # hardcode this UID work without modification
         uid: prometheus
         type: prometheus
         access: proxy

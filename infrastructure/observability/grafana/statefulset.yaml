@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: grafana
   annotations:
-    reloader.stakater.com/reload: "auto"
+    reloader.stakater.com/auto: "true"
 spec:
   serviceName: grafana
   replicas: 1
@@ -18,27 +18,11 @@ spec:
       labels:
         app.kubernetes.io/name: grafana
     spec:
+      serviceAccountName: grafana
       securityContext:
         runAsUser: 472
         runAsGroup: 472
         fsGroup: 472
-      initContainers:
-        # Grafana needs the provisioning dirs writable to link dashboard files.
-        # We merge ConfigMap mounts (read-only) into a writable emptyDir here.
-        - name: init-dashboards
-          image: busybox:1.37
-          command:
-            - sh
-            - -c
-            - |
-              mkdir -p /dashboards-out
-              cp -L /dashboards-in/*.json /dashboards-out/ 2>/dev/null || true
-              ls -la /dashboards-out
-          volumeMounts:
-            - name: dashboards-in
-              mountPath: /dashboards-in
-            - name: dashboards-out
-              mountPath: /dashboards-out
       containers:
         - name: grafana
           image: grafana/grafana:12.2.1
@@ -63,7 +47,6 @@ spec:
               value: "false"
             - name: GF_ANALYTICS_CHECK_FOR_UPDATES
               value: "false"
-            # Disable user signup; admin creates users manually via UI
             - name: GF_USERS_ALLOW_SIGN_UP
               value: "false"
             - name: GF_USERS_ALLOW_ORG_CREATE
@@ -96,8 +79,36 @@ spec:
               mountPath: /etc/grafana/provisioning/datasources
             - name: dashboards-provider
               mountPath: /etc/grafana/provisioning/dashboards
-            - name: dashboards-out
-              mountPath: /etc/grafana/dashboards
+            - name: dashboards
+              mountPath: /tmp/dashboards
+
+        - name: dashboard-sidecar
+          image: ghcr.io/kiwigrid/k8s-sidecar:1.28.0
+          env:
+            - name: LABEL
+              value: "grafana_dashboard"
+            - name: LABEL_VALUE
+              value: "1"
+            - name: FOLDER
+              value: /tmp/dashboards
+            - name: RESOURCE
+              value: configmap
+            # Watch only this namespace; avoids cluster-wide RBAC
+            - name: NAMESPACE
+              value: grafana
+            - name: METHOD
+              value: WATCH
+          resources:
+            requests:
+              cpu: 10m
+              memory: 32Mi
+            limits:
+              cpu: 100m
+              memory: 128Mi
+          volumeMounts:
+            - name: dashboards
+              mountPath: /tmp/dashboards
+
       volumes:
         - name: datasources
           configMap:
@@ -105,23 +116,9 @@ spec:
         - name: dashboards-provider
           configMap:
             name: grafana-dashboards-config
-        - name: dashboards-in
-          projected:
-            sources:
-              - configMap:
-                  name: grafana-dashboard-k8s-cluster
-              - configMap:
-                  name: grafana-dashboard-node-exporter
-              - configMap:
-                  name: grafana-dashboard-flux
-              - configMap:
-                  name: grafana-dashboard-traefik
-              - configMap:
-                  name: grafana-dashboard-postgres
-              - configMap:
-                  name: grafana-dashboard-blackbox
-        - name: dashboards-out
+        - name: dashboards
           emptyDir: {}
+
   volumeClaimTemplates:
     - metadata:
         name: data

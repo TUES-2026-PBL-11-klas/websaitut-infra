@@ -3,58 +3,11 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboard-flux
   namespace: grafana
+  labels:
+    grafana_dashboard: "1"
 data:
   flux.json: |
     {
-      "__inputs": [
-        {
-          "name": "DS_PROMETHEUS",
-          "label": "Prometheus",
-          "description": "",
-          "type": "datasource",
-          "pluginId": "prometheus",
-          "pluginName": "Prometheus"
-        }
-      ],
-      "__elements": {},
-      "__requires": [
-        {
-          "type": "panel",
-          "id": "bargauge",
-          "name": "Bar gauge",
-          "version": ""
-        },
-        {
-          "type": "grafana",
-          "id": "grafana",
-          "name": "Grafana",
-          "version": "9.0.5"
-        },
-        {
-          "type": "datasource",
-          "id": "prometheus",
-          "name": "Prometheus",
-          "version": "1.0.0"
-        },
-        {
-          "type": "panel",
-          "id": "stat",
-          "name": "Stat",
-          "version": ""
-        },
-        {
-          "type": "panel",
-          "id": "table",
-          "name": "Table",
-          "version": ""
-        },
-        {
-          "type": "panel",
-          "id": "timeseries",
-          "name": "Time series",
-          "version": ""
-        }
-      ],
       "annotations": {
         "list": [
           {
@@ -82,8 +35,6 @@ data:
       "fiscalYearStartMonth": 0,
       "gnetId": 16714,
       "graphTooltip": 1,
-      "id": null,
-      "links": [],
       "liveNow": false,
       "panels": [
         {
@@ -1190,7 +1141,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "$DS_PROMETHEUS"
+              "uid": "prometheus"
             },
             "definition": "label_values(gotk_reconcile_condition, exported_namespace)",
             "hide": 0,
@@ -1232,7 +1183,6 @@ data:
       },
       "timezone": "",
       "title": "Flux2",
-      "uid": "eM7_f4V7z",
       "version": 32,
       "weekStart": ""
     }

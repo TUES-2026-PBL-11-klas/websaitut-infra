@@ -19,5 +19,6 @@ data:
         updateIntervalSeconds: 30
         allowUiUpdates: false
         options:
-          path: /etc/grafana/dashboards
+          # Must match the emptyDir mountPath shared with dashboard-sidecar
+          path: /tmp/dashboards
           foldersFromFilesStructure: true

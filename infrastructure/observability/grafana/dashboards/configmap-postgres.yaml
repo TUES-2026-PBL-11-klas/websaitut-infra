@@ -3,45 +3,11 @@ kind: ConfigMap
 metadata:
   name: grafana-dashboard-postgres
   namespace: grafana
+  labels:
+    grafana_dashboard: "1"
 data:
   postgres.json: |
     {
-      "__inputs": [
-        {
-          "name": "DS_PROMETHEUS",
-          "label": "DS_PROMETHEUS",
-          "description": "",
-          "type": "datasource",
-          "pluginId": "prometheus",
-          "pluginName": "Prometheus"
-        }
-      ],
-      "__requires": [
-        {
-          "type": "grafana",
-          "id": "grafana",
-          "name": "Grafana",
-          "version": "6.3.5"
-        },
-        {
-          "type": "panel",
-          "id": "graph",
-          "name": "Graph",
-          "version": ""
-        },
-        {
-          "type": "datasource",
-          "id": "prometheus",
-          "name": "Prometheus",
-          "version": "1.0.0"
-        },
-        {
-          "type": "panel",
-          "id": "singlestat",
-          "name": "Singlestat",
-          "version": ""
-        }
-      ],
       "annotations": {
         "list": [
           {
@@ -59,9 +25,7 @@ data:
       "editable": true,
       "gnetId": 9628,
       "graphTooltip": 0,
-      "id": null,
       "iteration": 1568751813814,
-      "links": [],
       "panels": [
         {
           "collapsed": false,
@@ -85,7 +49,10 @@ data:
             "#7eb26d",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -168,7 +135,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "start time of the process",
           "format": "dateTimeFromNow",
           "gauge": {
@@ -251,7 +221,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "decbytes",
           "gauge": {
             "maxValue": 100,
@@ -334,7 +307,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "short",
           "gauge": {
             "maxValue": 100,
@@ -417,7 +393,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "short",
           "gauge": {
             "maxValue": 100,
@@ -500,7 +479,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -577,7 +559,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Average user and system CPU time spent in seconds.",
           "fill": 1,
           "fillGradient": 0,
@@ -668,7 +653,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Virtual and Resident memory size in bytes, averages over 5 min interval",
           "fill": 1,
           "fillGradient": 0,
@@ -767,7 +755,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Number of open file descriptors",
           "fill": 1,
           "fillGradient": 0,
@@ -876,7 +867,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -957,7 +951,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -1038,7 +1035,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -1119,7 +1119,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -1201,7 +1204,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 1,
           "format": "bytes",
           "gauge": {
@@ -1283,7 +1289,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1364,7 +1373,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1445,7 +1457,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1526,7 +1541,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1616,7 +1634,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1712,7 +1733,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1810,7 +1834,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1905,7 +1932,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1999,7 +2029,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2093,7 +2126,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 0,
           "fill": 1,
           "fillGradient": 0,
@@ -2190,7 +2226,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2284,7 +2323,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2378,7 +2420,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2472,7 +2517,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 2,
           "fill": 1,
           "gridPos": {
@@ -2561,7 +2609,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -2676,7 +2727,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 0,
           "fill": 1,
           "gridPos": {
@@ -2771,7 +2825,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Total amount of data written to temporary files by queries in this database. All temporary files are counted, regardless of why the temporary file was created, and regardless of the log_temp_files setting.",
           "fill": 1,
           "gridPos": {
@@ -2859,7 +2916,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -3029,7 +3089,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "Prometheus",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": false,
@@ -3051,7 +3114,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "Prometheus",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": false,
@@ -3073,7 +3139,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "Prometheus",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": false,
@@ -3095,7 +3164,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "Prometheus",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": true,
@@ -3117,7 +3189,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "Prometheus",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": true,
@@ -3169,6 +3244,5 @@ data:
       },
       "timezone": "",
       "title": "PostgreSQL Database",
-      "uid": "000000039",
       "version": 1
     }
