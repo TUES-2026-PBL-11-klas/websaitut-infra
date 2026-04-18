@@ -7,3 +7,5 @@ resources:
   - configmap-traefik.yaml
   - configmap-postgres.yaml
   - configmap-blackbox.yaml
+  - configmap-victorialogs-explorer.yaml
+  - configmap-victorialogs-node.yaml

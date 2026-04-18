@@ -16,12 +16,14 @@ if ! command -v jq &>/dev/null; then
 fi
 
 DASHBOARDS=(
-  "15759:k8s-cluster"    # Kubernetes / Views / Global
-  "1860:node-exporter"   # Node Exporter Full
-  "16714:flux"           # FluxCD Cluster Stats
-  "17346:traefik"        # Traefik 3
-  "9628:postgres"        # PostgreSQL Database
-  "7587:blackbox"        # Prometheus Blackbox Exporter
+  "15759:k8s-cluster"          # Kubernetes / Views / Global
+  "1860:node-exporter"         # Node Exporter Full
+  "16714:flux"                 # FluxCD Cluster Stats
+  "17346:traefik"              # Traefik 3
+  "9628:postgres"              # PostgreSQL Database
+  "7587:blackbox"              # Prometheus Blackbox Exporter
+  "22759:victorialogs-explorer" # VictoriaLogs — log browser (LogsQL)
+  "22084:victorialogs-node"    # VictoriaLogs — single-node health
 )
 
 # jq program that normalizes all datasource references in a dashboard.
