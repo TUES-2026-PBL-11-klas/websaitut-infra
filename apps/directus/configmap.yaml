@@ -4,7 +4,9 @@ metadata:
   name: directus-config
   namespace: directus
 data:
-  PUBLIC_URL: "https://cms.vdemirev.com"
+  PUBLIC_URL: "https://directus.vdemirev.com"
+  CORS_ENABLED: "true"
+  CORS_ORIGIN: "https://website.vdemirev.com"
   DB_CLIENT: "pg"
   DB_HOST: "postgres.postgres.svc.cluster.local"
   DB_PORT: "5432"
