@@ -5,4 +5,4 @@ resources:
   - configmap-flux.yaml
   - configmap-postgres.yaml
   - configmap-blackbox.yaml
-  - configmap-victorialogs-explorer.yaml
+  - configmap-victorialogs-simple.yaml
