@@ -1,15 +1,16 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: image-automation
+  name: obs-alertmanager
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/gitops/image-automation
+  path: ./infrastructure/observability/alertmanager
   prune: true
+  wait: true
   dependsOn:
-    - name: external-secrets
-    - name: apps-website
+    - name: obs-victoriametrics-operator
+    - name: infra-secret-store

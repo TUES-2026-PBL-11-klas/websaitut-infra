@@ -1,15 +1,14 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: cert-manager-issuer
+  name: infra-receiver
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./infrastructure/ingress/cert-manager-issuer
+  path: ./infrastructure/gitops/receiver
   prune: true
-  force: true
   dependsOn:
-    - name: cert-manager
+    - name: infra-secret-store

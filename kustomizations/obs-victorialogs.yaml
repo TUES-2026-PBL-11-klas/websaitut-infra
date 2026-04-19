@@ -1,15 +1,15 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
 kind: Kustomization
 metadata:
-  name: minio-init
+  name: obs-victorialogs
   namespace: flux-system
 spec:
   interval: 10m
   sourceRef:
     kind: GitRepository
     name: flux-system
-  path: ./jobs/minio
+  path: ./infrastructure/observability/victorialogs
   prune: true
-  force: true
+  wait: true
   dependsOn:
-    - name: apps-minio
+    - name: obs-victoriametrics-operator

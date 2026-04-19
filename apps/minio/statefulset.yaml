@@ -4,7 +4,7 @@ metadata:
   name: minio
   namespace: minio
   annotations:
-    secret.reloader.stakater.com/reload: "minio-credentials"
+    reloader.stakater.com/auto: "true"
 spec:
   serviceName: minio
   replicas: 1

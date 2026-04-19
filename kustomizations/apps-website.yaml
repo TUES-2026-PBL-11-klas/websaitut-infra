@@ -12,5 +12,5 @@ spec:
   prune: true
   wait: true
   dependsOn:
-    - name: external-secrets
+    - name: infra-secret-store
     - name: apps-directus

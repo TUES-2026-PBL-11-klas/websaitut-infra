@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: postgres-exporter
   annotations:
-    secret.reloader.stakater.com/reload: "postgres-exporter-credentials"
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:

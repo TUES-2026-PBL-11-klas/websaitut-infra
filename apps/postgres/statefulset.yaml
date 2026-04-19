@@ -4,7 +4,7 @@ metadata:
   name: postgres
   namespace: postgres
   annotations:
-    secret.reloader.stakater.com/reload: "postgres-credentials"
+    reloader.stakater.com/auto: "true"
 spec:
   serviceName: postgres
   replicas: 1

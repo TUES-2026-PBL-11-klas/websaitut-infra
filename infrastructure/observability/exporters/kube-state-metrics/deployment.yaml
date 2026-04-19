@@ -6,7 +6,7 @@ metadata:
   labels:
     app.kubernetes.io/name: kube-state-metrics
   annotations:
-    configmap.reloader.stakater.com/reload: "kube-state-metrics-flux-config"
+    reloader.stakater.com/auto: "true"
 spec:
   replicas: 1
   selector:
