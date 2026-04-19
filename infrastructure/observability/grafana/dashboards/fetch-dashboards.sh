@@ -21,7 +21,6 @@ DASHBOARDS=(
   "9628:postgres"                # PostgreSQL Database
   "7587:blackbox"                # Prometheus Blackbox Exporter
   "21550:victorialogs-simple"    # Simple VictoriaLogs — basic logs browser
-  "22759:victorialogs-explorer"  # VictoriaLogs Explorer — richer log UI
 )
 
 # jq program that normalizes all datasource references in a dashboard.
