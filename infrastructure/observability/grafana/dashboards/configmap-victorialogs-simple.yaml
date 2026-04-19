@@ -32,8 +32,8 @@ data:
       "panels": [
         {
           "datasource": {
-            "type": "victorialogs-datasource",
-            "uid": "${DS_LOGS}"
+            "type": "victoriametrics-logs-datasource",
+            "uid": "victorialogs"
           },
           "gridPos": {
             "h": 23,
@@ -55,8 +55,8 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "victorialogs-datasource",
-                "uid": "${DS_LOGS}"
+                "type": "victoriametrics-logs-datasource",
+                "uid": "victorialogs"
               },
               "expr": "(kubernetes.namespace_name: ${namespace.*} AND kubernetes.pod_name: ${workload.*}) OR \"${query.*}\"",
               "queryType": "range",
@@ -104,7 +104,7 @@ data:
             },
             "definition": "label_values(kube_namespace_created,namespace)",
             "hide": 0,
-            "includeAll": false,
+            "includeAll": true,
             "multi": false,
             "name": "namespace",
             "options": [],
@@ -117,7 +117,8 @@ data:
             "regex": "",
             "skipUrlSync": false,
             "sort": 0,
-            "type": "query"
+            "type": "query",
+            "allValue": "*"
           },
           {
             "datasource": {
@@ -126,8 +127,8 @@ data:
             },
             "definition": "label_values(namespace_workload_pod:kube_pod_owner:relabel{namespace=\"$namespace\"},workload)",
             "hide": 0,
-            "includeAll": false,
-            "multi": false,
+            "includeAll": true,
+            "multi": true,
             "name": "workload",
             "options": [],
             "query": {
@@ -139,7 +140,8 @@ data:
             "regex": "",
             "skipUrlSync": false,
             "sort": 0,
-            "type": "query"
+            "type": "query",
+            "allValue": "*"
           },
           {
             "current": {
