@@ -23,12 +23,11 @@ spec:
           image: ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260419124826-5cd4e2e # {"$imagepolicy": "flux-system:website"}
           ports:
             - containerPort: 3000
-          env:
-            - name: BACKEND_URL
-              value: http://directus.directus.svc.cluster.local:8055
           envFrom:
             - secretRef:
                 name: google-calendar
+            - secretRef:
+                name: directus-api
           startupProbe:
             httpGet:
               path: /
