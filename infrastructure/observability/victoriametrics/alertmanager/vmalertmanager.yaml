@@ -6,8 +6,14 @@ metadata:
 spec:
   replicaCount: 1
   configSecret: alertmanager-config
-  secrets:
-    - alertmanager-webhook
+  extraArgs:
+    config.expand-env: "true"
+  extraEnvs:
+    - name: DISCORD_WEBHOOK_URL
+      valueFrom:
+        secretKeyRef:
+          name: alertmanager-webhook
+          key: discord-webhook-url
   retention: 120h
   resources:
     requests:

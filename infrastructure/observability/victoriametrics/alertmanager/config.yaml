@@ -19,7 +19,7 @@ stringData:
     receivers:
       - name: discord
         discord_configs:
-          - webhook_url_file: /etc/alertmanager/secrets/alertmanager-webhook/discord-webhook-url
+          - webhook_url: '$DISCORD_WEBHOOK_URL'
             send_resolved: true
 
     inhibit_rules:
