@@ -15,8 +15,4 @@ spec:
     - secretKey: DIRECTUS_TOKEN
       remoteRef:
         key: directus
-        property: directus_key
-    - secretKey: DIRECTUS_URL
-      remoteRef:
-        key: directus
-        property: public_url
+        property: directus_token
