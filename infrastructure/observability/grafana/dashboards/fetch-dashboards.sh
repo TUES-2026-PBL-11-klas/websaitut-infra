@@ -16,14 +16,12 @@ if ! command -v jq &>/dev/null; then
 fi
 
 DASHBOARDS=(
-  "15759:k8s-cluster"          # Kubernetes / Views / Global
-  "1860:node-exporter"         # Node Exporter Full
-  "16714:flux"                 # FluxCD Cluster Stats
-  "17346:traefik"              # Traefik 3
-  "9628:postgres"              # PostgreSQL Database
-  "7587:blackbox"              # Prometheus Blackbox Exporter
-  "22759:victorialogs-explorer" # VictoriaLogs — log browser (LogsQL)
-  "22084:victorialogs-node"    # VictoriaLogs — single-node health
+  "15759:k8s-cluster"            # Kubernetes / Views / Global
+  "16714:flux"                   # FluxCD Cluster Stats
+  "9628:postgres"                # PostgreSQL Database
+  "7587:blackbox"                # Prometheus Blackbox Exporter
+  "21550:victorialogs-simple"    # Simple VictoriaLogs — basic logs browser
+  "22759:victorialogs-explorer"  # VictoriaLogs Explorer — richer log UI
 )
 
 # jq program that normalizes all datasource references in a dashboard.
@@ -35,13 +33,15 @@ def normalize_ds:
   elif type == "string" then
     if test("\\$\\{DS_") or test("prometheus"; "i") then
       {"type": "prometheus", "uid": "prometheus"}
-    elif test("loki"; "i") or test("victorialogs"; "i") then
+    elif test("loki"; "i") or test("victorialogs"; "i") or test("victoriametrics-logs"; "i") then
       {"type": "victoriametrics-logs-datasource", "uid": "victorialogs"}
     else . end
   elif type == "object" then
     if ((.uid // "") | (test("\\$\\{DS_") or test("prometheus"; "i"))) then
       {"type": "prometheus", "uid": "prometheus"}
     elif ((.uid // "") | (test("loki"; "i") or test("victorialogs"; "i"))) then
+      {"type": "victoriametrics-logs-datasource", "uid": "victorialogs"}
+    elif ((.type // "") | test("victoriametrics-logs")) then
       {"type": "victoriametrics-logs-datasource", "uid": "victorialogs"}
     else . end
   else . end
@@ -51,12 +51,11 @@ walk(
     .datasource |= normalize_ds
   else . end
 )
-# Remove links to silence "parse *: empty url" toast in Node Exporter dashboard
+# Remove links to silence "parse *: empty url" toast
 | del(.links)
 # Remove id/uid so Grafana assigns fresh ones on import
 | del(.id, .uid)
-# Remove import-only metadata that causes Grafana to treat the JSON as a
-# template rather than a ready-to-provision dashboard
+# Remove import-only metadata
 | del(.__inputs, .__requires, .__elements)
 JQ
 
@@ -84,7 +83,6 @@ metadata:
 data:
   ${name}.json: |
 YAML
-  # Indent the JSON body to satisfy YAML block scalar requirements
   echo "$normalized" | sed 's/^/    /' >> "$configmap"
 
   echo "    wrote ${configmap}"

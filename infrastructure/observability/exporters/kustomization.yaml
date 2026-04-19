@@ -5,6 +5,7 @@ resources:
   - blackbox-exporter/deployment.yaml
   - blackbox-exporter/service.yaml
   - kube-state-metrics/rbac.yaml
+  - kube-state-metrics/flux-config.yaml
   - kube-state-metrics/deployment.yaml
   - kube-state-metrics/service.yaml
   - node-exporter/daemonset.yaml

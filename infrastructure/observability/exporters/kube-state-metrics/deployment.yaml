@@ -5,6 +5,8 @@ metadata:
   namespace: vm
   labels:
     app.kubernetes.io/name: kube-state-metrics
+  annotations:
+    configmap.reloader.stakater.com/reload: "kube-state-metrics-flux-config"
 spec:
   replicas: 1
   selector:
@@ -19,6 +21,9 @@ spec:
       containers:
         - name: kube-state-metrics
           image: registry.k8s.io/kube-state-metrics/kube-state-metrics:v2.18.0
+          args:
+            - --custom-resource-state-config-file=/etc/ksm/custom-resource-state.yaml
+            - --custom-resource-state-only=false
           ports:
             - name: metrics
               containerPort: 8080
@@ -48,3 +53,11 @@ spec:
             readOnlyRootFilesystem: true
             runAsNonRoot: true
             runAsUser: 65534
+          volumeMounts:
+            - name: custom-resource-config
+              mountPath: /etc/ksm
+              readOnly: true
+      volumes:
+        - name: custom-resource-config
+          configMap:
+            name: kube-state-metrics-flux-config

@@ -1,0 +1,104 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kube-state-metrics-flux-config
+  namespace: vm
+data:
+  # Enables gotk_resource_info and related CR-state metrics that the official
+  # Flux dashboard (grafana.com/dashboards/16714) queries. See:
+  # https://fluxcd.io/flux/monitoring/metrics/#flux-custom-resource-metrics
+  custom-resource-state.yaml: |
+    kind: CustomResourceStateMetrics
+    spec:
+      resources:
+        - groupVersionKind:
+            group: source.toolkit.fluxcd.io
+            kind: "GitRepository"
+            version: "v1"
+          metricNamePrefix: gotk
+          metrics:
+            - name: "resource_info"
+              help: "The current state of a GitOps Toolkit resource."
+              each:
+                type: Info
+                info:
+                  labelsFromPath:
+                    name: [metadata, name]
+              labelsFromPath:
+                exported_namespace: [metadata, namespace]
+                ready: [status, conditions, "[type=Ready]", status]
+                suspended: [spec, suspend]
+                revision: [status, artifact, revision]
+                url: [spec, url]
+        - groupVersionKind:
+            group: source.toolkit.fluxcd.io
+            kind: "HelmRepository"
+            version: "v1"
+          metricNamePrefix: gotk
+          metrics:
+            - name: "resource_info"
+              help: "The current state of a GitOps Toolkit resource."
+              each:
+                type: Info
+                info:
+                  labelsFromPath:
+                    name: [metadata, name]
+              labelsFromPath:
+                exported_namespace: [metadata, namespace]
+                ready: [status, conditions, "[type=Ready]", status]
+                suspended: [spec, suspend]
+                url: [spec, url]
+        - groupVersionKind:
+            group: source.toolkit.fluxcd.io
+            kind: "OCIRepository"
+            version: "v1beta2"
+          metricNamePrefix: gotk
+          metrics:
+            - name: "resource_info"
+              help: "The current state of a GitOps Toolkit resource."
+              each:
+                type: Info
+                info:
+                  labelsFromPath:
+                    name: [metadata, name]
+              labelsFromPath:
+                exported_namespace: [metadata, namespace]
+                ready: [status, conditions, "[type=Ready]", status]
+                suspended: [spec, suspend]
+                url: [spec, url]
+        - groupVersionKind:
+            group: kustomize.toolkit.fluxcd.io
+            kind: "Kustomization"
+            version: "v1"
+          metricNamePrefix: gotk
+          metrics:
+            - name: "resource_info"
+              help: "The current state of a GitOps Toolkit resource."
+              each:
+                type: Info
+                info:
+                  labelsFromPath:
+                    name: [metadata, name]
+              labelsFromPath:
+                exported_namespace: [metadata, namespace]
+                ready: [status, conditions, "[type=Ready]", status]
+                suspended: [spec, suspend]
+                revision: [status, lastAppliedRevision]
+        - groupVersionKind:
+            group: helm.toolkit.fluxcd.io
+            kind: "HelmRelease"
+            version: "v2"
+          metricNamePrefix: gotk
+          metrics:
+            - name: "resource_info"
+              help: "The current state of a GitOps Toolkit resource."
+              each:
+                type: Info
+                info:
+                  labelsFromPath:
+                    name: [metadata, name]
+              labelsFromPath:
+                exported_namespace: [metadata, namespace]
+                ready: [status, conditions, "[type=Ready]", status]
+                suspended: [spec, suspend]
+                revision: [status, history, "0", chartVersion]

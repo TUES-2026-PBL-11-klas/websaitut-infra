@@ -72,6 +72,22 @@ rules:
     resources:
       - endpointslices
     verbs: ["list", "watch"]
+  # Flux custom resources — feed gotk_resource_info metric used by dashboard 16714
+  - apiGroups: ["source.toolkit.fluxcd.io"]
+    resources: ["*"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["kustomize.toolkit.fluxcd.io"]
+    resources: ["*"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["helm.toolkit.fluxcd.io"]
+    resources: ["*"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["notification.toolkit.fluxcd.io"]
+    resources: ["*"]
+    verbs: ["list", "watch"]
+  - apiGroups: ["image.toolkit.fluxcd.io"]
+    resources: ["*"]
+    verbs: ["list", "watch"]
 ---
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRoleBinding
