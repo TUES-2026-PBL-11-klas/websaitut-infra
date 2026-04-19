@@ -23,19 +23,52 @@ DASHBOARDS=(
   "21550:1:victorialogs-simple"
 )
 
-NORMALIZE='
+# Hardcode our actual datasource UIDs (from datasources.yaml):
+#   prometheus uid = "prometheus"  (VictoriaMetrics, type prometheus)
+#   logs uid      = "victorialogs" (VictoriaLogs, type victoriametrics-logs-datasource)
+#
+# We hardcode rather than use template variables because community dashboards use
+# inconsistent variable names (DS_PROMETHEUS, datasource, DS_SIGNCL-PROMETHEUS, etc.)
+# and Grafana only resolves template vars by name — mismatches silently break panels.
+PROMETHEUS_UID="prometheus"
+LOGS_UID="victorialogs"
+
+NORMALIZE="
+  # 1. Normalize datasource object refs in panels/targets
   walk(
-    if type == "object" and has("datasource") then
-      if .datasource | type == "object" then
-        if .datasource.type == "prometheus" then
-          .datasource = {"type": "prometheus", "uid": "${datasource}"}
-        elif .datasource.type == "loki" then
-          .datasource = {"type": "victoriametrics-logs-datasource", "uid": "${logs_datasource}"}
+    if type == \"object\" and has(\"datasource\") then
+      if (.datasource | type) == \"object\" then
+        if .datasource.type == \"prometheus\" then
+          .datasource = {\"type\": \"prometheus\", \"uid\": \"${PROMETHEUS_UID}\"}
+        elif (.datasource.type == \"loki\" or .datasource.type == \"victoriametrics-logs-datasource\") then
+          .datasource = {\"type\": \"victoriametrics-logs-datasource\", \"uid\": \"${LOGS_UID}\"}
         else . end
+      elif (.datasource | type) == \"string\" and (.datasource | length) > 0 then
+        # String UID (hardcoded from another installation) — assume prometheus
+        .datasource = {\"type\": \"prometheus\", \"uid\": \"${PROMETHEUS_UID}\"}
       else . end
     else . end
-  )
-'
+  ) |
+
+  # 2. Fix datasource-type template variables so Grafana resolves them correctly
+  if .templating.list then
+    .templating.list |= map(
+      if .type == \"datasource\" and .query == \"prometheus\" then
+        .query = \"prometheus\" |
+        .current = {\"selected\": false, \"text\": \"VictoriaMetrics\", \"value\": \"${PROMETHEUS_UID}\"} |
+        .options = [{\"selected\": true, \"text\": \"VictoriaMetrics\", \"value\": \"${PROMETHEUS_UID}\"}]
+      elif .type == \"datasource\" and (.query == \"loki\" or .query == \"victoriametrics-logs-datasource\") then
+        .query = \"victoriametrics-logs-datasource\" |
+        .current = {\"selected\": false, \"text\": \"VictoriaLogs\", \"value\": \"${LOGS_UID}\"} |
+        .options = [{\"selected\": true, \"text\": \"VictoriaLogs\", \"value\": \"${LOGS_UID}\"}]
+      elif .type == \"constant\" and (.name | test(\"LOG|LOGS|LOKI\"; \"i\")) then
+        .query = \"${LOGS_UID}\" | .current = {\"value\": \"${LOGS_UID}\", \"text\": \"${LOGS_UID}\"}
+      elif .type == \"constant\" and (.name | test(\"METRIC|PROM\"; \"i\")) then
+        .query = \"${PROMETHEUS_UID}\" | .current = {\"value\": \"${PROMETHEUS_UID}\", \"text\": \"${PROMETHEUS_UID}\"}
+      else . end
+    )
+  else . end
+"
 
 # sed script: rewrite LogsQL field names in queries/variables.
 # Runs on the already-normalized JSON before we wrap it in ConfigMap.

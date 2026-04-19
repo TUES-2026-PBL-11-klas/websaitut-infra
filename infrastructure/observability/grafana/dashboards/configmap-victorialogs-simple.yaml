@@ -77,7 +77,12 @@ data:
             "name": "DS_LOGS",
             "type": "constant",
             "hide": 2,
-            "skipUrlSync": false
+            "skipUrlSync": false,
+            "query": "victorialogs",
+            "current": {
+              "value": "victorialogs",
+              "text": "victorialogs"
+            }
           },
           {
             "description": "Datasource for metrics",
@@ -85,12 +90,17 @@ data:
             "name": "DS_METRICS",
             "type": "constant",
             "hide": 2,
-            "skipUrlSync": false
+            "skipUrlSync": false,
+            "query": "prometheus",
+            "current": {
+              "value": "prometheus",
+              "text": "prometheus"
+            }
           },
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${datasource}"
+              "uid": "prometheus"
             },
             "definition": "label_values(kube_namespace_created,namespace)",
             "hide": 0,
@@ -112,7 +122,7 @@ data:
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "${datasource}"
+              "uid": "prometheus"
             },
             "definition": "label_values(namespace_workload_pod:kube_pod_owner:relabel{namespace=\"$namespace\"},workload)",
             "hide": 0,

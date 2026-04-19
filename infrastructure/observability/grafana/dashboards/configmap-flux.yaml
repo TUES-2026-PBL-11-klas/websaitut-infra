@@ -91,7 +91,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -142,7 +142,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "expr": "count(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"True\",kind=~\"GitRepository|HelmRepository|Bucket\"})\n-\nsum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"Deleted\",kind=~\"GitRepository|HelmRepository|Bucket\"})",
               "interval": "",
@@ -156,7 +156,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -207,7 +207,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "expr": "sum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"GitRepository|HelmRepository|Bucket\"})",
               "interval": "",
@@ -221,7 +221,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -275,7 +275,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind)",
               "interval": "",
@@ -289,7 +289,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -340,7 +340,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "exemplar": true,
               "expr": "count(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"True\",kind=~\"Kustomization|HelmRelease\"})\n-\nsum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"Deleted\",kind=~\"Kustomization|HelmRelease\"})",
@@ -355,7 +355,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -406,7 +406,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "expr": "sum(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"Kustomization|HelmRelease\"})",
               "interval": "",
@@ -420,7 +420,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -474,7 +474,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind)",
               "interval": "",
@@ -489,7 +489,7 @@ data:
           "collapsed": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "gridPos": {
             "h": 1,
@@ -503,7 +503,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "refId": "A"
             }
@@ -514,7 +514,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -599,7 +599,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "expr": "label_join(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"GitRepository|HelmRepository|Bucket\"}, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
               "format": "table",
@@ -611,7 +611,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "editorMode": "code",
               "expr": "label_join(gotk_suspend_status{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"} - 2, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
@@ -730,7 +730,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -818,7 +818,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "expr": "label_join(gotk_reconcile_condition{exported_namespace=~\"$namespace\",type=\"Ready\",status=\"False\",kind=~\"Kustomization|HelmRelease\"}, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
               "format": "table",
@@ -830,7 +830,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "editorMode": "code",
               "expr": "label_join(gotk_suspend_status{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"} - 2, \"join_key\", \",\", \"kind\", \"exported_namespace\", \"name\")",
@@ -952,7 +952,7 @@ data:
           "collapsed": false,
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "gridPos": {
             "h": 1,
@@ -966,7 +966,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "refId": "A"
             }
@@ -977,7 +977,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -1052,7 +1052,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "editorMode": "code",
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind, exported_namespace, name)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"GitRepository|HelmRepository|Bucket\"}[5m])) by (kind, exported_namespace, name)",
@@ -1068,7 +1068,7 @@ data:
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "${datasource}"
+            "uid": "prometheus"
           },
           "description": "",
           "fieldConfig": {
@@ -1143,7 +1143,7 @@ data:
             {
               "datasource": {
                 "type": "prometheus",
-                "uid": "${datasource}"
+                "uid": "prometheus"
               },
               "editorMode": "code",
               "expr": "sum(rate(gotk_reconcile_duration_seconds_sum{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name, exported_namespace)\n/\nsum(rate(gotk_reconcile_duration_seconds_count{exported_namespace=~\"$namespace\",kind=~\"Kustomization|HelmRelease\"}[5m])) by (kind, name, exported_namespace)",
@@ -1173,14 +1173,20 @@ data:
           {
             "current": {
               "selected": false,
-              "text": "Prometheus",
-              "value": "Prometheus"
+              "text": "VictoriaMetrics",
+              "value": "prometheus"
             },
             "hide": 2,
             "includeAll": false,
             "multi": false,
             "name": "DS_PROMETHEUS",
-            "options": [],
+            "options": [
+              {
+                "selected": true,
+                "text": "VictoriaMetrics",
+                "value": "prometheus"
+              }
+            ],
             "query": "prometheus",
             "refresh": 1,
             "regex": "",
@@ -1192,7 +1198,7 @@ data:
             "current": {},
             "datasource": {
               "type": "prometheus",
-              "uid": "${datasource}"
+              "uid": "prometheus"
             },
             "definition": "label_values(gotk_reconcile_condition, exported_namespace)",
             "hide": 0,

@@ -48,7 +48,10 @@ data:
         "list": [
           {
             "builtIn": 1,
-            "datasource": "-- Grafana --",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "enable": true,
             "hide": true,
             "iconColor": "rgba(0, 211, 255, 1)",
@@ -87,7 +90,10 @@ data:
             "#7eb26d",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -170,7 +176,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "start time of the process",
           "format": "dateTimeFromNow",
           "gauge": {
@@ -253,7 +262,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "decbytes",
           "gauge": {
             "maxValue": 100,
@@ -336,7 +348,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "short",
           "gauge": {
             "maxValue": 100,
@@ -419,7 +434,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "rgba(50, 172, 45, 0.97)"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "short",
           "gauge": {
             "maxValue": 100,
@@ -502,7 +520,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -579,7 +600,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Average user and system CPU time spent in seconds.",
           "fill": 1,
           "fillGradient": 0,
@@ -670,7 +694,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Virtual and Resident memory size in bytes, averages over 5 min interval",
           "fill": 1,
           "fillGradient": 0,
@@ -769,7 +796,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Number of open file descriptors",
           "fill": 1,
           "fillGradient": 0,
@@ -878,7 +908,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -959,7 +992,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -1040,7 +1076,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -1121,7 +1160,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "bytes",
           "gauge": {
             "maxValue": 100,
@@ -1203,7 +1245,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 1,
           "format": "bytes",
           "gauge": {
@@ -1285,7 +1330,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1366,7 +1414,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1447,7 +1498,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1528,7 +1582,10 @@ data:
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1618,7 +1675,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1714,7 +1774,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1812,7 +1875,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -1907,7 +1973,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2001,7 +2070,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2095,7 +2167,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 0,
           "fill": 1,
           "fillGradient": 0,
@@ -2192,7 +2267,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2286,7 +2364,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2380,7 +2461,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "fillGradient": 0,
           "gridPos": {
@@ -2474,7 +2558,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 2,
           "fill": 1,
           "gridPos": {
@@ -2563,7 +2650,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -2678,7 +2768,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "decimals": 0,
           "fill": 1,
           "gridPos": {
@@ -2773,7 +2866,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "description": "Total amount of data written to temporary files by queries in this database. All temporary files are counted, regardless of why the temporary file was created, and regardless of the log_temp_files setting.",
           "fill": 1,
           "gridPos": {
@@ -2861,7 +2957,10 @@ data:
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus"
+          },
           "fill": 1,
           "gridPos": {
             "h": 7,
@@ -2964,11 +3063,22 @@ data:
             "hide": 0,
             "label": "datasource",
             "name": "DS_PROMETHEUS",
-            "options": [],
+            "options": [
+              {
+                "selected": true,
+                "text": "VictoriaMetrics",
+                "value": "prometheus"
+              }
+            ],
             "query": "prometheus",
             "refresh": 1,
             "regex": "",
-            "type": "datasource"
+            "type": "datasource",
+            "current": {
+              "selected": false,
+              "text": "VictoriaMetrics",
+              "value": "prometheus"
+            }
           },
           {
             "auto": true,
@@ -3031,7 +3141,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": false,
@@ -3053,7 +3166,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": false,
@@ -3075,7 +3191,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": false,
@@ -3097,7 +3216,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": true,
@@ -3119,7 +3241,10 @@ data:
           {
             "allValue": null,
             "current": {},
-            "datasource": "${DS_PROMETHEUS}",
+            "datasource": {
+              "type": "prometheus",
+              "uid": "prometheus"
+            },
             "definition": "",
             "hide": 0,
             "includeAll": true,
