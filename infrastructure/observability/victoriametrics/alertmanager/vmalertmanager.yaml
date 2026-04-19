@@ -9,14 +9,8 @@ spec:
     repository: quay.io/prometheus/alertmanager
     tag: v0.28.0
   configSecret: alertmanager-config
-  extraArgs:
-    config.expand-env: "true"
-  extraEnvs:
-    - name: DISCORD_WEBHOOK_URL
-      valueFrom:
-        secretKeyRef:
-          name: alertmanager-webhook
-          key: discord-webhook-url
+  secrets:
+    - alertmanager-webhook
   retention: 120h
   resources:
     requests:
