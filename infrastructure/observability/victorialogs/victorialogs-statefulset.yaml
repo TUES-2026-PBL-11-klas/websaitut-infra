@@ -23,7 +23,8 @@ spec:
       containers:
         - name: victorialogs
           # Check https://hub.docker.com/r/victoriametrics/victoria-logs/tags for latest stable.
-          image: docker.io/victoriametrics/victoria-logs:v1.50.0-victorialogs
+          # From v1.25.0+ the -victorialogs suffix is dropped from the tag
+          image: docker.io/victoriametrics/victoria-logs:v1.50.0
           args:
             - --storageDataPath=/victoria-logs-data
             - --httpListenAddr=:9428
