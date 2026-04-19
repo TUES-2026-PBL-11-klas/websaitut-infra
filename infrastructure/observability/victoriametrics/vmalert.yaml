@@ -7,9 +7,9 @@ spec:
   replicaCount: 1
   evaluationInterval: "30s"
   datasource:
-    url: http://vmsingle-victoria-metrics:8429
+    url: http://vmsingle-victoria-metrics.vm.svc:8429
   notifiers:
-    - url: http://vmalertmanager-victoria-metrics:9093
+    - url: http://vmalertmanager-victoria-metrics.vm.svc:9093
   ruleSelector: {}
   ruleNamespaceSelector: {}
   resources:
