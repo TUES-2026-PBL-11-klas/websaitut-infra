@@ -1,96 +1,90 @@
 #!/usr/bin/env bash
-# Fetches community Grafana dashboards and wraps them as ConfigMap YAML files.
-# Run once to refresh; commit the output configmap-*.yaml files.
+# Fetches community Grafana dashboards, normalizes datasource types AND
+# rewrites field names to match our Fluent Bit schema, then regenerates
+# kustomization.yaml.
 #
-# Requirements: curl, jq
-# Usage: ./fetch-dashboards.sh
-
+# Field name normalization:
+#   kubernetes_namespace     -> kubernetes.namespace_name
+#   kubernetes_pod_name      -> kubernetes.pod_name
+#   kubernetes_container_name-> kubernetes.container_name
+# These are the field names our Fluent Bit produces (dot-nested, from the
+# kubernetes filter with nested Merge_Log). Community dashboards default to
+# the flat underscore schema from the VL Helm chart's Vector config.
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-cd "$SCRIPT_DIR"
+cd "$(dirname "$0")"
 
-if ! command -v jq &>/dev/null; then
-  echo "error: jq is required" >&2
-  exit 1
-fi
-
+# Format: "id:revision:slug"
 DASHBOARDS=(
-  "15759:k8s-cluster"            # Kubernetes / Views / Global
-  "16714:flux"                   # FluxCD Cluster Stats
-  "9628:postgres"                # PostgreSQL Database
-  "7587:blackbox"                # Prometheus Blackbox Exporter
-  "21550:victorialogs-simple"    # Simple VictoriaLogs — basic logs browser
+  "15759:37:k8s-cluster"
+  "16714:1:flux"
+  "9628:8:postgres"
+  "7587:3:blackbox"
+  "21550:1:victorialogs-simple"
 )
 
-# jq program that normalizes all datasource references in a dashboard.
-# Handles both legacy string form ("${DS_PROMETHEUS}") and modern object form
-# ({"type": "...", "uid": "..."}), in panels, annotations, and templating.
-read -r -d '' NORMALIZE_JQ <<'JQ' || true
-def normalize_ds:
-  if . == null then .
-  elif type == "string" then
-    if test("\\$\\{DS_") or test("prometheus"; "i") then
-      {"type": "prometheus", "uid": "prometheus"}
-    elif test("loki"; "i") or test("victorialogs"; "i") or test("victoriametrics-logs"; "i") then
-      {"type": "victoriametrics-logs-datasource", "uid": "victorialogs"}
+NORMALIZE='
+  walk(
+    if type == "object" and has("datasource") then
+      if .datasource | type == "object" then
+        if .datasource.type == "prometheus" then
+          .datasource = {"type": "prometheus", "uid": "${datasource}"}
+        elif .datasource.type == "loki" then
+          .datasource = {"type": "victoriametrics-logs-datasource", "uid": "${logs_datasource}"}
+        else . end
+      else . end
     else . end
-  elif type == "object" then
-    if ((.uid // "") | (test("\\$\\{DS_") or test("prometheus"; "i"))) then
-      {"type": "prometheus", "uid": "prometheus"}
-    elif ((.uid // "") | (test("loki"; "i") or test("victorialogs"; "i"))) then
-      {"type": "victoriametrics-logs-datasource", "uid": "victorialogs"}
-    elif ((.type // "") | test("victoriametrics-logs")) then
-      {"type": "victoriametrics-logs-datasource", "uid": "victorialogs"}
-    else . end
-  else . end
-;
-walk(
-  if type == "object" and has("datasource") then
-    .datasource |= normalize_ds
-  else . end
-)
-# Remove links to silence "parse *: empty url" toast
-| del(.links)
-# Remove id/uid so Grafana assigns fresh ones on import
-| del(.id, .uid)
-# Remove import-only metadata
-| del(.__inputs, .__requires, .__elements)
-JQ
+  )
+'
 
-fetch_one() {
-  local id="$1"
-  local name="$2"
-  local configmap="configmap-${name}.yaml"
+# sed script: rewrite LogsQL field names in queries/variables.
+# Runs on the already-normalized JSON before we wrap it in ConfigMap.
+FIELD_REWRITE='
+  s/kubernetes_namespace/kubernetes.namespace_name/g;
+  s/kubernetes_pod_name/kubernetes.pod_name/g;
+  s/kubernetes_container_name/kubernetes.container_name/g;
+'
 
-  echo "==> Fetching dashboard ${id} (${name})"
+rm -f configmap-*.yaml
 
-  local raw
-  raw=$(curl -fsSL "https://grafana.com/api/dashboards/${id}/revisions/latest/download")
+generated=()
+for entry in "${DASHBOARDS[@]}"; do
+  IFS=':' read -r id revision slug <<< "$entry"
+  out="configmap-${slug}.yaml"
+  echo ">>> ${id} rev ${revision} -> ${out}"
 
-  local normalized
-  normalized=$(echo "$raw" | jq "$NORMALIZE_JQ")
+  json=$(
+    curl -sfL "https://grafana.com/api/dashboards/${id}/revisions/${revision}/download" \
+      | jq "$NORMALIZE" \
+      | sed -E "$FIELD_REWRITE"
+  )
 
-  cat > "$configmap" <<YAML
+  cat > "$out" <<EOF
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: grafana-dashboard-${name}
+  name: grafana-dashboard-${slug}
   namespace: grafana
   labels:
     grafana_dashboard: "1"
 data:
-  ${name}.json: |
-YAML
-  echo "$normalized" | sed 's/^/    /' >> "$configmap"
-
-  echo "    wrote ${configmap}"
-}
-
-for entry in "${DASHBOARDS[@]}"; do
-  IFS=':' read -r id name <<< "$entry"
-  fetch_one "$id" "$name"
+  ${slug}.json: |
+$(echo "$json" | sed 's/^/    /')
+EOF
+  generated+=("$out")
 done
 
-echo
-echo "==> Done. Review and commit the configmap-*.yaml files."
+# Regenerate kustomization.yaml to match reality.
+{
+  echo "# Auto-generated by fetch-dashboards.sh — do not edit by hand."
+  echo "apiVersion: kustomize.config.k8s.io/v1beta1"
+  echo "kind: Kustomization"
+  echo ""
+  echo "resources:"
+  for f in "${generated[@]}"; do
+    echo "  - ${f}"
+  done
+} > kustomization.yaml
+
+echo ""
+echo ">>> Done: $(ls configmap-*.yaml | wc -l) configmaps + kustomization.yaml"

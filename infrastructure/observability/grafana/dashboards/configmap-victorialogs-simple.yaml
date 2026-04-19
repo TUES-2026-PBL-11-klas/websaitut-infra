@@ -27,11 +27,13 @@ data:
       "editable": true,
       "fiscalYearStartMonth": 0,
       "graphTooltip": 0,
+      "id": 26,
+      "links": [],
       "panels": [
         {
           "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus"
+            "type": "victorialogs-datasource",
+            "uid": "${DS_LOGS}"
           },
           "gridPos": {
             "h": 23,
@@ -53,10 +55,10 @@ data:
           "targets": [
             {
               "datasource": {
-                "type": "prometheus",
-                "uid": "prometheus"
+                "type": "victorialogs-datasource",
+                "uid": "${DS_LOGS}"
               },
-              "expr": "(kubernetes_namespace: ${namespace.*} AND kubernetes_pod_name: ${workload.*}) OR \"${query.*}\"",
+              "expr": "(kubernetes.namespace_name: ${namespace.*} AND kubernetes.pod_name: ${workload.*}) OR \"${query.*}\"",
               "queryType": "range",
               "refId": "A"
             }
@@ -88,7 +90,7 @@ data:
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "prometheus"
+              "uid": "${datasource}"
             },
             "definition": "label_values(kube_namespace_created,namespace)",
             "hide": 0,
@@ -110,7 +112,7 @@ data:
           {
             "datasource": {
               "type": "prometheus",
-              "uid": "prometheus"
+              "uid": "${datasource}"
             },
             "definition": "label_values(namespace_workload_pod:kube_pod_owner:relabel{namespace=\"$namespace\"},workload)",
             "hide": 0,
@@ -157,8 +159,47 @@ data:
       "timepicker": {},
       "timezone": "browser",
       "title": "Simple VictoriaLogs",
+      "uid": "bdpzp3w3jkt8ga",
       "version": 1,
       "weekStart": "",
+      "__inputs": [
+        {
+          "name": "DS_LOGS",
+          "label": "Logs Datasource",
+          "description": "Datasource for logs",
+          "type": "datasource",
+          "pluginId": "victorialogs-datasource",
+          "pluginName": "VictoriaLogs"
+        },
+        {
+          "name": "DS_METRICS",
+          "label": "Metrics Datasource",
+          "description": "Datasource for metrics",
+          "type": "datasource",
+          "pluginId": "prometheus",
+          "pluginName": "Prometheus"
+        }
+      ],
+      "__requires": [
+        {
+          "type": "datasource",
+          "id": "victorialogs-datasource",
+          "name": "VictoriaLogs",
+          "version": "1.0.0"
+        },
+        {
+          "type": "datasource",
+          "id": "prometheus",
+          "name": "Prometheus",
+          "version": "1.0.0"
+        },
+        {
+          "type": "panel",
+          "id": "logs",
+          "name": "Logs",
+          "version": ""
+        }
+      ],
       "gnetId": 21550,
       "description": "Simple dashboard to watch VictoriaLogs\r\n"
     }
