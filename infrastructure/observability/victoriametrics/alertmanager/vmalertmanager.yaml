@@ -5,6 +5,9 @@ metadata:
   namespace: vm
 spec:
   replicaCount: 1
+  image:
+    repository: quay.io/prometheus/alertmanager
+    tag: v0.27.0
   configSecret: alertmanager-config
   extraArgs:
     config.expand-env: "true"

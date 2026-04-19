@@ -8,8 +8,6 @@ spec:
   chart:
     spec:
       chart: victoria-metrics-operator
-      # Pin to a known-good minor; bump manually after testing.
-      # Check: helm search repo victoriametrics/victoria-metrics-operator
       version: "~0.37.0"
       sourceRef:
         kind: HelmRepository
@@ -21,5 +19,4 @@ spec:
     crds: CreateReplace
   values:
     operator:
-      # Do NOT auto-convert Prometheus CRDs — pure VM stack only.
       disable_prometheus_converter: true
