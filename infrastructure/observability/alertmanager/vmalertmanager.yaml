@@ -5,6 +5,9 @@ metadata:
   namespace: vm
 spec:
   replicaCount: 1
+  podMetadata:
+    annotations:
+      secret.reloader.stakater.com/reload: "alertmanager-webhook,alertmanager-config"
   image:
     repository: quay.io/prometheus/alertmanager
     tag: v0.28.0
