@@ -5,8 +5,10 @@ metadata:
   namespace: vm
 spec:
   replicaCount: 1
-  retention: 120h
   configSecret: alertmanager-config
+  secrets:
+    - alertmanager-webhook
+  retention: 120h
   resources:
     requests:
       cpu: 25m
@@ -18,7 +20,7 @@ spec:
     volumeClaimTemplate:
       spec:
         accessModes: ["ReadWriteOnce"]
-        storageClassName: local-path
         resources:
           requests:
             storage: 1Gi
+        storageClassName: local-path
