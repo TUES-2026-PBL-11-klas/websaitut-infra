@@ -20,6 +20,13 @@ stringData:
       - name: discord
         discord_configs:
           - webhook_url_file: /etc/vm/secrets/alertmanager-webhook/discord-webhook-url
+            title: '{{ if eq .Status "firing" }}🔥 [FIRING:{{ .Alerts.Firing | len }}]{{ else }}✅ [RESOLVED]{{ end }} {{ .CommonLabels.alertname }} ({{ .CommonLabels.severity }})'
+            message: |-
+              {{ range .Alerts -}}
+              **{{ .Annotations.summary }}**
+              {{ with .Annotations.description }}{{ . }}
+              {{ end }}
+              {{ end -}}
 
     inhibit_rules:
       - source_matchers: ['severity = "critical"']
