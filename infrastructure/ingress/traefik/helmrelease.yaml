@@ -5,6 +5,10 @@ metadata:
   namespace: kube-system
 spec:
   interval: 1h
+  install:
+    crds: Create
+  upgrade:
+    crds: CreateReplace
   chart:
     spec:
       chart: traefik
