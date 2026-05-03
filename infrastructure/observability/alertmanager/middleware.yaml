@@ -5,4 +5,4 @@ metadata:
   namespace: vm
 spec:
   basicAuth:
-    secret: alertmanager-secrets
+    secret: alertmanager-basic-auth

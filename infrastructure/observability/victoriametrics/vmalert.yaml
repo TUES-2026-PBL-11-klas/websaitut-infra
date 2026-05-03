@@ -9,7 +9,7 @@ spec:
   datasource:
     url: http://vmsingle-victoria-metrics.vm.svc:8429
   notifiers:
-    - url: http://vmalertmanager-victoria-metrics.vm.svc:9093
+    - url: http://vmalertmanager-main.vm.svc:9093
   ruleSelector: {}
   ruleNamespaceSelector: {}
   resources:

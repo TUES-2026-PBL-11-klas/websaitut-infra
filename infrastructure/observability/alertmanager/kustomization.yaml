@@ -3,7 +3,8 @@ kind: Kustomization
 namespace: vm
 
 resources:
-  - secrets.yaml
+  - secrets/webhook.yaml
+  - secrets/basic-auth.yaml
   - vmalertmanager.yaml
   - ingress.yaml
   - config.yaml

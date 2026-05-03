@@ -13,7 +13,7 @@ spec:
     tag: v0.28.0
   configSecret: alertmanager-config
   secrets:
-    - alertmanager-secrets
+    - alertmanager-webhook
   retention: 120h
   resources:
     requests:
