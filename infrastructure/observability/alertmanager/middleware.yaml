@@ -1,0 +1,8 @@
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: alertmanager-auth
+  namespace: vm
+spec:
+  basicAuth:
+    secret: alertmanager-secrets

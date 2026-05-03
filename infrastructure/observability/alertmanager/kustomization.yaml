@@ -7,3 +7,4 @@ resources:
   - vmalertmanager.yaml
   - ingress.yaml
   - config.yaml
+  - middleware.yaml

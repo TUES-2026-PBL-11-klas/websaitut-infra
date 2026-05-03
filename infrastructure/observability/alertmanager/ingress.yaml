@@ -5,6 +5,7 @@ metadata:
   namespace: vm
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt
+    traefik.ingress.kubernetes.io/router.middlewares: vm-alertmanager-auth@kubernetescrd
 spec:
   ingressClassName: traefik
   rules:
@@ -15,7 +16,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: vmalertmanager-victoria-metrics
+                name: vmalertmanager-main
                 port:
                   number: 9093
   tls:

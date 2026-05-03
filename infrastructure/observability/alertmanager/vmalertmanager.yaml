@@ -1,7 +1,7 @@
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMAlertmanager
 metadata:
-  name: victoria-metrics
+  name: main
   namespace: vm
 spec:
   replicaCount: 1
@@ -13,7 +13,7 @@ spec:
     tag: v0.28.0
   configSecret: alertmanager-config
   secrets:
-    - alertmanager-webhook
+    - alertmanager-secrets
   retention: 120h
   resources:
     requests:
