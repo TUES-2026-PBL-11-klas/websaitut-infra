@@ -23,3 +23,5 @@ spec:
   podMetricsEndpoints:
     - port: http-prom
       interval: 60s
+    - port: http
+      interval: 60s
