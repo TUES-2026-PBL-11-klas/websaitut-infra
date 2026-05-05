@@ -6,11 +6,4 @@ resources:
   - vmalert.yaml
   - limitrange.yaml
   - rules/vmrule.yaml
-  - scrapes/cert-manager-scrape.yaml
-  - scrapes/kube-state-metrics-scrape.yaml
-  - scrapes/minio-scrape.yaml
-  - scrapes/node-exporter-scrape.yaml
-  - scrapes/postgres-exporter-scrape.yaml
-  - scrapes/traefik-scrape.yaml
-  - scrapes/flux-scrape.yaml
-  - scrapes/external-probes.yaml
+  - scrapes/

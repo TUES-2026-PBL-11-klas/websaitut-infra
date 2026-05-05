@@ -10,3 +10,4 @@ resources:
   - flux-scrape.yaml
   - external-probes.yaml
   - victorialogs-scrape.yaml
+  - kubelet-scrape.yaml
