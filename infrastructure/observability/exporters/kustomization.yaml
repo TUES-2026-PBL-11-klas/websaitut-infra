@@ -4,7 +4,9 @@ resources:
   - blackbox-exporter/configmap.yaml
   - blackbox-exporter/deployment.yaml
   - blackbox-exporter/service.yaml
-  - kube-state-metrics/rbac.yaml
+  - kube-state-metrics/sa.yaml
+  - kube-state-metrics/clusterrole.yaml
+  - kube-state-metrics/clusterrolebinding.yaml
   - kube-state-metrics/flux-config.yaml
   - kube-state-metrics/deployment.yaml
   - kube-state-metrics/service.yaml
