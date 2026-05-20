@@ -1,0 +1,9 @@
+# Non-secret values — safe to commit
+subscription_id = "e2af04cf-5383-4fad-82be-499dc63b14b1"
+tenant_id       = "7bf76063-05c2-4a22-96db-1f0c324ce890"
+environment     = "prod"
+location        = "polandcentral"
+directus_image      = "docker.io/directus/directus:11.17.2"
+directus_public_url = "https://ca-cms-prod.delightfulmeadow-a96fce5b.polandcentral.azurecontainerapps.io"
+website_image       = "ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260518141847-356b2de"
+ghcr_username   = "rangelovkiril"
