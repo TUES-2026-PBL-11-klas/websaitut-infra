@@ -58,6 +58,11 @@ variable "ghcr_password" {
 
 # --- App config ---
 
+variable "directus_admin_email" {
+  type        = string
+  description = "Directus admin email"
+}
+
 variable "directus_public_url" {
   type        = string
   description = "Public URL for Directus CMS"

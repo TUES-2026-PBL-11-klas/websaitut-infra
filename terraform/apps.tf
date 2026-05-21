@@ -67,12 +67,6 @@ resource "azurerm_container_app" "cms" {
   }
 
   secret {
-    name                = "directus-token"
-    identity            = "System"
-    key_vault_secret_id = azurerm_key_vault_secret.directus_token.versionless_id
-  }
-
-  secret {
     name                = "storage-key"
     identity            = "System"
     key_vault_secret_id = azurerm_key_vault_secret.storage_account_key.versionless_id
@@ -129,7 +123,7 @@ resource "azurerm_container_app" "cms" {
       # Auth
       env {
         name  = "ADMIN_EMAIL"
-        value = "blondinkata@banana.com"
+        value = var.directus_admin_email
       }
       env {
         name        = "ADMIN_PASSWORD"
@@ -143,11 +137,6 @@ resource "azurerm_container_app" "cms" {
         name        = "SECRET"
         secret_name = "crypto-secret"
       }
-      env {
-        name        = "ACCESS_TOKEN"
-        secret_name = "directus-token"
-      }
-
       # Public URL
       env {
         name  = "PUBLIC_URL"
@@ -240,6 +229,10 @@ resource "azurerm_container_app" "website" {
   revision_mode                = "Single"
   workload_profile_name        = "Consumption"
 
+  identity {
+    type = "SystemAssigned"
+  }
+
   secret {
     name  = "ghcr-password"
     value = var.ghcr_password
@@ -274,7 +267,7 @@ resource "azurerm_container_app" "website" {
 
       env {
         name  = "DIRECTUS_URL"
-        value = "http://ca-cms-${var.environment}"
+        value = "http://${azurerm_container_app.cms.name}"
       }
       env {
         name        = "DIRECTUS_TOKEN"
