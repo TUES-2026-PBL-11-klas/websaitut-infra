@@ -42,34 +42,19 @@ resource "azurerm_container_app" "cms" {
     type = "SystemAssigned"
   }
 
-  secret {
-    name                = "admin-password"
-    identity            = "System"
-    key_vault_secret_id = azurerm_key_vault_secret.directus_admin_password.versionless_id
-  }
-
-  secret {
-    name                = "db-password"
-    identity            = "System"
-    key_vault_secret_id = azurerm_key_vault_secret.directus_db_password.versionless_id
-  }
-
-  secret {
-    name                = "crypto-key"
-    identity            = "System"
-    key_vault_secret_id = azurerm_key_vault_secret.directus_key.versionless_id
-  }
-
-  secret {
-    name                = "crypto-secret"
-    identity            = "System"
-    key_vault_secret_id = azurerm_key_vault_secret.directus_secret.versionless_id
-  }
-
-  secret {
-    name                = "storage-key"
-    identity            = "System"
-    key_vault_secret_id = azurerm_key_vault_secret.storage_account_key.versionless_id
+  dynamic "secret" {
+    for_each = {
+      "admin-password"           = azurerm_key_vault_secret.directus_admin_password.versionless_id
+      "db-password"              = azurerm_key_vault_secret.directus_db_password.versionless_id
+      "key"                      = azurerm_key_vault_secret.directus_key.versionless_id
+      "secret"                   = azurerm_key_vault_secret.directus_secret.versionless_id
+      "storage-azure-account-key" = azurerm_key_vault_secret.storage_account_key.versionless_id
+    }
+    content {
+      name                = secret.key
+      identity            = "System"
+      key_vault_secret_id = secret.value
+    }
   }
 
   ingress {
@@ -90,129 +75,43 @@ resource "azurerm_container_app" "cms" {
       cpu    = 0.5
       memory = "1Gi"
 
-      # Database
-      env {
-        name  = "DB_CLIENT"
-        value = "pg"
-      }
-      env {
-        name  = "DB_HOST"
-        value = azurerm_postgresql_flexible_server.main.fqdn
-      }
-      env {
-        name  = "DB_PORT"
-        value = "5432"
-      }
-      env {
-        name  = "DB_DATABASE"
-        value = "directus"
-      }
-      env {
-        name  = "DB_USER"
-        value = "directus"
-      }
-      env {
-        name  = "DB_SSL"
-        value = "true"
-      }
-      env {
-        name        = "DB_PASSWORD"
-        secret_name = "db-password"
-      }
-
-      # Auth
-      env {
-        name  = "ADMIN_EMAIL"
-        value = var.directus_admin_email
-      }
-      env {
-        name        = "ADMIN_PASSWORD"
-        secret_name = "admin-password"
-      }
-      env {
-        name        = "KEY"
-        secret_name = "crypto-key"
-      }
-      env {
-        name        = "SECRET"
-        secret_name = "crypto-secret"
-      }
-      # Public URL
-      env {
-        name  = "PUBLIC_URL"
-        value = var.directus_public_url
-      }
-
-      # Storage
-      env {
-        name  = "STORAGE_LOCATIONS"
-        value = "azure"
-      }
-      env {
-        name  = "STORAGE_AZURE_DRIVER"
-        value = "azure"
-      }
-      env {
-        name  = "STORAGE_AZURE_CONTAINER_NAME"
-        value = "media"
-      }
-      env {
-        name  = "STORAGE_AZURE_ACCOUNT_NAME"
-        value = azurerm_storage_account.media.name
-      }
-      env {
-        name        = "STORAGE_AZURE_ACCOUNT_KEY"
-        secret_name = "storage-key"
-      }
-
-      # Misc
-      env {
-        name  = "CORS_ENABLED"
-        value = "true"
-      }
-      env {
-        name  = "CORS_ORIGIN"
-        value = "true"
-      }
-      env {
-        name  = "CACHE_ENABLED"
-        value = "true"
-      }
-      env {
-        name  = "CACHE_AUTO_PURGE"
-        value = "true"
-      }
-      env {
-        name  = "CACHE_TTL"
-        value = "5m"
-      }
-      env {
-        name  = "RATE_LIMITER_ENABLED"
-        value = "true"
-      }
-      env {
-        name  = "RATE_LIMITER_POINTS"
-        value = "50"
-      }
-      env {
-        name  = "RATE_LIMITER_DURATION"
-        value = "1"
-      }
-      env {
-        name  = "RATE_LIMITER_STORE"
-        value = "memory"
-      }
-      env {
-        name  = "LOG_LEVEL"
-        value = "info"
-      }
-      env {
-        name  = "MAX_PAYLOAD_SIZE"
-        value = "10mb"
-      }
-      env {
-        name  = "TELEMETRY"
-        value = "false"
+      dynamic "env" {
+        for_each = {
+          DB_CLIENT                    = { value = "pg" }
+          DB_HOST                      = { value = azurerm_postgresql_flexible_server.main.fqdn }
+          DB_PORT                      = { value = "5432" }
+          DB_DATABASE                  = { value = "directus" }
+          DB_USER                      = { value = "directus" }
+          DB_SSL                       = { value = "true" }
+          DB_PASSWORD                  = { secret = "db-password" }
+          ADMIN_EMAIL                  = { value = var.directus_admin_email }
+          ADMIN_PASSWORD               = { secret = "admin-password" }
+          KEY                          = { secret = "key" }
+          SECRET                       = { secret = "secret" }
+          PUBLIC_URL                   = { value = var.directus_public_url }
+          STORAGE_LOCATIONS            = { value = "azure" }
+          STORAGE_AZURE_DRIVER         = { value = "azure" }
+          STORAGE_AZURE_CONTAINER_NAME = { value = "media" }
+          STORAGE_AZURE_ACCOUNT_NAME   = { value = azurerm_storage_account.media.name }
+          STORAGE_AZURE_ACCOUNT_KEY    = { secret = "storage-azure-account-key" }
+          CORS_ENABLED                 = { value = "true" }
+          CORS_ORIGIN                  = { value = "true" }
+          CACHE_ENABLED                = { value = "true" }
+          CACHE_AUTO_PURGE             = { value = "true" }
+          CACHE_TTL                    = { value = "5m" }
+          RATE_LIMITER_ENABLED         = { value = "true" }
+          RATE_LIMITER_POINTS          = { value = "50" }
+          RATE_LIMITER_DURATION        = { value = "1" }
+          RATE_LIMITER_STORE           = { value = "memory" }
+          LOG_LEVEL                    = { value = "info" }
+          MAX_PAYLOAD_SIZE             = { value = "10mb" }
+          TELEMETRY                    = { value = "false" }
+        }
+        content {
+          name        = env.key
+          value       = try(env.value.value, null)
+          secret_name = try(env.value.secret, null)
+        }
       }
     }
   }
@@ -259,19 +158,24 @@ resource "azurerm_container_app" "website" {
   }
 
   template {
+    min_replicas = 1
+
     container {
       name   = "ca-website-${var.environment}"
       image  = var.website_image
       cpu    = 0.5
       memory = "1Gi"
 
-      env {
-        name  = "DIRECTUS_URL"
-        value = "http://${azurerm_container_app.cms.name}"
-      }
-      env {
-        name        = "DIRECTUS_TOKEN"
-        secret_name = "directus-token"
+      dynamic "env" {
+        for_each = {
+          DIRECTUS_URL   = { value = "http://${azurerm_container_app.cms.name}" }
+          DIRECTUS_TOKEN = { secret = "directus-token" }
+        }
+        content {
+          name        = env.key
+          value       = try(env.value.value, null)
+          secret_name = try(env.value.secret, null)
+        }
       }
 
       liveness_probe {
