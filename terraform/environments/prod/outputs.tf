@@ -11,7 +11,7 @@ output "postgres_fqdn" {
 }
 
 output "cms_key_vault_uri" {
-  value = azurerm_key_vault.main.vault_uri
+  value = azurerm_key_vault.cms.vault_uri
 }
 
 output "website_key_vault_uri" {

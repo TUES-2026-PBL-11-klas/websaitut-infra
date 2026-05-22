@@ -14,12 +14,12 @@ resource "azurerm_log_analytics_workspace" "main" {
 # ──────────────────────────────────────────────
 
 resource "azurerm_container_app_environment" "main" {
-  name                           = "cae-${var.environment}"
-  location                       = var.location
-  resource_group_name            = azurerm_resource_group.main.name
-  infrastructure_subnet_id       = azurerm_subnet.apps.id
-  infrastructure_resource_group_name = "ME_cae-${var.environment}_${azurerm_resource_group.main.name}_${var.location}"
-  log_analytics_workspace_id     = azurerm_log_analytics_workspace.main.id
+  name                               = "cae-${var.environment}"
+  location                           = var.location
+  resource_group_name                = azurerm_resource_group.main.name
+  infrastructure_subnet_id           = azurerm_subnet.apps.id
+  infrastructure_resource_group_name = "rg-cae-prod"
+  log_analytics_workspace_id         = azurerm_log_analytics_workspace.main.id
 
   workload_profile {
     name                  = "Consumption"
@@ -32,6 +32,7 @@ resource "azurerm_container_app_environment" "main" {
 # ──────────────────────────────────────────────
 
 resource "azurerm_container_app" "cms" {
+  depends_on = [time_sleep.wait_for_kv_propagation]
   name                         = "ca-cms-${var.environment}"
   container_app_environment_id = azurerm_container_app_environment.main.id
   resource_group_name          = azurerm_resource_group.main.name
@@ -39,20 +40,21 @@ resource "azurerm_container_app" "cms" {
   workload_profile_name        = "Consumption"
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.cms.id]
   }
 
   dynamic "secret" {
     for_each = {
-      "admin-password"           = azurerm_key_vault_secret.directus_admin_password.versionless_id
-      "db-password"              = azurerm_key_vault_secret.directus_db_password.versionless_id
-      "key"                      = azurerm_key_vault_secret.directus_key.versionless_id
-      "secret"                   = azurerm_key_vault_secret.directus_secret.versionless_id
+      "admin-password"            = data.azurerm_key_vault_secret.directus_admin_password.versionless_id
+      "db-password"               = data.azurerm_key_vault_secret.directus_db_password.versionless_id
+      "key"                       = data.azurerm_key_vault_secret.directus_key.versionless_id
+      "secret"                    = data.azurerm_key_vault_secret.directus_secret.versionless_id
       "storage-azure-account-key" = azurerm_key_vault_secret.storage_account_key.versionless_id
     }
     content {
       name                = secret.key
-      identity            = "System"
+      identity            = azurerm_user_assigned_identity.cms.id
       key_vault_secret_id = secret.value
     }
   }
@@ -122,6 +124,7 @@ resource "azurerm_container_app" "cms" {
 # ──────────────────────────────────────────────
 
 resource "azurerm_container_app" "website" {
+  depends_on = [time_sleep.wait_for_kv_propagation]
   name                         = "ca-website-${var.environment}"
   container_app_environment_id = azurerm_container_app_environment.main.id
   resource_group_name          = azurerm_resource_group.main.name
@@ -129,17 +132,20 @@ resource "azurerm_container_app" "website" {
   workload_profile_name        = "Consumption"
 
   identity {
-    type = "SystemAssigned"
+    type         = "UserAssigned"
+    identity_ids = [azurerm_user_assigned_identity.website.id]
   }
 
   secret {
-    name  = "ghcr-password"
-    value = var.ghcr_password
+    name                = "ghcr-password"
+    identity            = azurerm_user_assigned_identity.website.id
+    key_vault_secret_id = data.azurerm_key_vault_secret.ghcr_password.versionless_id
   }
 
   secret {
-    name  = "directus-token"
-    value = var.directus_token
+    name                = "directus-token"
+    identity            = azurerm_user_assigned_identity.website.id
+    key_vault_secret_id = data.azurerm_key_vault_secret.directus_token.versionless_id
   }
 
   registry {

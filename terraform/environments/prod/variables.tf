@@ -18,46 +18,6 @@ variable "environment" {
   default = "prod"
 }
 
-# --- Secrets (never commit values) ---
-
-variable "directus_admin_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "directus_db_password" {
-  type      = string
-  sensitive = true
-}
-
-variable "directus_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "directus_secret" {
-  type      = string
-  sensitive = true
-}
-
-variable "directus_token" {
-  type      = string
-  sensitive = true
-}
-
-variable "storage_account_key" {
-  type      = string
-  sensitive = true
-}
-
-variable "ghcr_password" {
-  type        = string
-  sensitive   = true
-  description = "GitHub Container Registry PAT"
-}
-
-# --- App config ---
-
 variable "directus_admin_email" {
   type        = string
   description = "Directus admin email"
