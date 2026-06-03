@@ -1,0 +1,30 @@
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: email
+  namespace: website
+spec:
+  refreshInterval: 1h
+  secretStoreRef:
+    name: vault-backend
+    kind: ClusterSecretStore
+  target:
+    name: email
+    creationPolicy: Owner
+  data:
+    - secretKey: EMAIL_FROM
+      remoteRef:
+        key: secret/email
+        property: EMAIL_FROM
+    - secretKey: EMAIL_APP_PASSWORD
+      remoteRef:
+        key: secret/email
+        property: EMAIL_APP_PASSWORD
+    - secretKey: SYNC_WEBHOOK_SECRET
+      remoteRef:
+        key: secret/email
+        property: SYNC_WEBHOOK_SECRET
+    - secretKey: TEST_EMAIL_RECIPIENT
+      remoteRef:
+        key: secret/email
+        property: TEST_EMAIL_RECIPIENT
