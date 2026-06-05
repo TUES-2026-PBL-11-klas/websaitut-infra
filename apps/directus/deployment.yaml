@@ -28,6 +28,8 @@ spec:
                 name: directus-config
             - secretRef:
                 name: directus-credentials
+            - secretRef:
+                name: email
           startupProbe:
             httpGet:
               path: /server/health
