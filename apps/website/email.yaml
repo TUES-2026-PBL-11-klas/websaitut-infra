@@ -11,20 +11,6 @@ spec:
   target:
     name: email
     creationPolicy: Owner
-  data:
-    - secretKey: EMAIL_FROM
-      remoteRef:
+  dataFrom:
+    - extract:
         key: email
-        property: EMAIL_FROM
-    - secretKey: EMAIL_APP_PASSWORD
-      remoteRef:
-        key: email
-        property: EMAIL_APP_PASSWORD
-    - secretKey: SYNC_WEBHOOK_SECRET
-      remoteRef:
-        key: email
-        property: SYNC_WEBHOOK_SECRET
-    - secretKey: TEST_EMAIL_RECIPIENT
-      remoteRef:
-        key: email
-        property: TEST_EMAIL_RECIPIENT
