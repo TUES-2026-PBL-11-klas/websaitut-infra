@@ -31,6 +31,8 @@ spec:
                 name: google-calendar
             - secretRef:
                 name: directus-token
+            - secretRef:
+                name: email
           startupProbe:
             httpGet:
               path: /
