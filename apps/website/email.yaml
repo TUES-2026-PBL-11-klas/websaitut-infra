@@ -11,6 +11,20 @@ spec:
   target:
     name: email
     creationPolicy: Owner
-  dataFrom:
-    - extract:
+  data:
+    - secretKey: GMAIL_FROM
+      remoteRef:
         key: email
+        property: gmail_from
+    - secretKey: GMAIL_APP_PASSWORD
+      remoteRef:
+        key: email
+        property: gmail_app_password
+    - secretKey: SYNC_WEBHOOK_SECRET
+      remoteRef:
+        key: email
+        property: sync_webhook_secret
+    - secretKey: TEST_EMAIL_RECIPIENT
+      remoteRef:
+        key: email
+        property: test_email_recipient
