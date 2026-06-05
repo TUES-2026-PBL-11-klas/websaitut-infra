@@ -20,3 +20,8 @@ data:
   STORAGE_S3_FORCE_PATH_STYLE: "true"
   ENV_ALLOW_LIST: "SYNC_WEBHOOK_SECRET"
   FLOWS_ENABLED: "true"
+  EMAIL_TRANSPORT: "smtp"
+  EMAIL_SMTP_HOST: "smtp.gmail.com"
+  EMAIL_SMTP_PORT: "587"
+  EMAIL_SMTP_SECURE: "false"
+  EMAIL_FROM: "TUES Website (Didi Email)"
