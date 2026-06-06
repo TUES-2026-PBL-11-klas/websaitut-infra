@@ -1,11 +1,11 @@
 output "cms_fqdns" {
   description = "Directus CMS FQDNs per environment"
-  value       = { for env, app in azurerm_container_app.cms : env => app.ingress[0].fqdn }
+  value       = { for env, m in module.cms : env => m.fqdn }
 }
 
 output "website_fqdns" {
   description = "Website FQDNs per environment"
-  value       = { for env, app in azurerm_container_app.website : env => app.ingress[0].fqdn }
+  value       = { for env, m in module.website : env => m.fqdn }
 }
 
 output "postgres_fqdn" {
@@ -15,11 +15,11 @@ output "postgres_fqdn" {
 
 output "keyvault_uri" {
   description = "Key Vault URI"
-  value       = azurerm_key_vault.main.vault_uri
+  value       = module.key_vault.vault_uri
 }
 
 output "pg_admin_password" {
-  description = "PostgreSQL admin password (read from KV or here)"
+  description = "PostgreSQL admin password"
   value       = random_password.pg_admin.result
   sensitive   = true
 }

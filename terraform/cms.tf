@@ -37,66 +37,23 @@ locals {
   }
 }
 
-resource "azurerm_container_app" "cms" {
+module "cms" {
   for_each = local.environments
+  source   = "./modules/container_app"
 
   name                         = "ca-cms-${each.key}"
   resource_group_name          = azurerm_resource_group.main.name
   container_app_environment_id = azurerm_container_app_environment.main.id
-  revision_mode                = "Single"
-  workload_profile_name        = "Consumption"
+  identity_id                  = azurerm_user_assigned_identity.app["cms-${each.key}"].id
+  image                        = var.directus_image
+  port                         = 8055
+  min_replicas                 = local.app_config[each.key].min_replicas
+  cpu                          = local.app_config[each.key].cpu
+  memory                       = local.app_config[each.key].memory
 
-  identity {
-    type         = "UserAssigned"
-    identity_ids = [azurerm_user_assigned_identity.app["cms-${each.key}"].id]
-  }
+  secrets    = local.cms_secret_ids[each.key]
+  plain_env  = local.cms_plain_env[each.key]
+  secret_env = local.cms_secret_env
 
-  dynamic "secret" {
-    for_each = local.cms_secret_ids[each.key]
-    content {
-      name                = secret.key
-      key_vault_secret_id = secret.value
-      identity            = azurerm_user_assigned_identity.app["cms-${each.key}"].id
-    }
-  }
-
-  template {
-    min_replicas = local.app_config[each.key].min_replicas
-    max_replicas = 10
-
-    container {
-      name   = "cms"
-      image  = var.directus_image
-      cpu    = local.app_config[each.key].cpu
-      memory = local.app_config[each.key].memory
-
-      dynamic "env" {
-        for_each = local.cms_plain_env[each.key]
-        content {
-          name  = env.key
-          value = env.value
-        }
-      }
-
-      dynamic "env" {
-        for_each = local.cms_secret_env
-        content {
-          name        = env.key
-          secret_name = env.value
-        }
-      }
-    }
-  }
-
-  ingress {
-    external_enabled = true
-    target_port      = 8055
-    traffic_weight {
-      latest_revision = true
-      percentage      = 100
-    }
-  }
-
-  tags       = merge(local.common_tags, { environment = each.key })
-  depends_on = [time_sleep.wait_for_kv_rbac]
+  tags = merge(local.common_tags, { environment = each.key })
 }
