@@ -29,8 +29,6 @@ spec:
           envFrom:
             - secretRef:
                 name: google-calendar
-            - secretRef:
-                name: directus-token
           startupProbe:
             httpGet:
               path: /
