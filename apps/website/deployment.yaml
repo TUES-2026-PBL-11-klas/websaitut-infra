@@ -20,7 +20,7 @@ spec:
         - name: ghcr-auth
       containers:
         - name: website
-          image: ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260606075818-393b0d2 # {"$imagepolicy": "flux-system:website"}
+          image: ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260606081714-e83dda1 # {"$imagepolicy": "flux-system:website"}
           ports:
             - containerPort: 3000
           env:
