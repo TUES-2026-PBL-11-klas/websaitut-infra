@@ -64,12 +64,10 @@ locals {
 
   website_secret_ids = {
     staging = {
-      "ghcr-password"  = module.key_vault.secret_ids["ghcr-password"]
-      "directus-token" = module.key_vault.secret_ids["staging-directus-token"]
+      "ghcr-password" = module.key_vault.secret_ids["ghcr-password"]
     }
     prod = {
-      "ghcr-password"  = module.key_vault.secret_ids["ghcr-password"]
-      "directus-token" = module.key_vault.secret_ids["prod-directus-token"]
+      "ghcr-password" = module.key_vault.secret_ids["ghcr-password"]
     }
   }
 }

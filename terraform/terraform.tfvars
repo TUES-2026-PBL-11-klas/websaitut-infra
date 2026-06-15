@@ -5,7 +5,12 @@ directus_image       = "directus/directus:11.17.2"
 directus_admin_email = "blondinkata@banana.com"
 ghcr_username        = "rangelovkiril"
 
+directus_public_urls = {
+  staging = "https://ca-cms-staging.salmonground-4aec1da8.polandcentral.azurecontainerapps.io"
+  prod    = "https://ca-cms-prod.salmonground-4aec1da8.polandcentral.azurecontainerapps.io"
+}
+
 images = {
   staging = "ghcr.io/tues-2026-pbl-11-klas/websaitut/website:latest"
-  prod    = "ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260518141847-356b2de"
+  prod    = "ghcr.io/tues-2026-pbl-11-klas/websaitut/website:20260608122140-c1f15bb"
 }

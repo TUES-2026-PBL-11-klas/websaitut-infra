@@ -15,10 +15,7 @@ module "website" {
   secrets = local.website_secret_ids[each.key]
 
   plain_env = {
-    DIRECTUS_URL = "https://${module.cms[each.key].fqdn}"
-  }
-  secret_env = {
-    DIRECTUS_TOKEN = "directus-token"
+    DIRECTUS_URL = "http://ca-cms-${each.key}"
   }
 
   registry = {
