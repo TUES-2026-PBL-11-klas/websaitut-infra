@@ -62,7 +62,7 @@ module "key_vault" {
   location            = azurerm_resource_group.main.location
   tenant_id           = var.tenant_id
   subnet_id           = module.networking.endpoints_subnet_id
-  vnet_id             = module.networking.vnet_id
+  private_dns_zone_id = module.networking.key_vault_private_dns_zone_id
 
   principal_ids = {
     "cms-staging"     = module.staging.cms_identity_principal_id

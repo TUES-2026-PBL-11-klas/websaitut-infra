@@ -19,9 +19,9 @@ variable "subnet_id" {
   description = "Subnet for the private endpoint"
 }
 
-variable "vnet_id" {
+variable "private_dns_zone_id" {
   type        = string
-  description = "VNet for the private DNS zone link"
+  description = "Shared privatelink.vaultcore.azure.net zone ID (from the networking module)"
 }
 
 variable "principal_ids" {
