@@ -100,4 +100,12 @@ resource "azurerm_container_app" "this" {
   }
 
   tags = var.tags
+
+  # CI/CD deploys via `az containerapp update --image`; only image is
+  # ignored here so TF doesn't fight that on the next apply.
+  lifecycle {
+    ignore_changes = [
+      template[0].container[0].image,
+    ]
+  }
 }
