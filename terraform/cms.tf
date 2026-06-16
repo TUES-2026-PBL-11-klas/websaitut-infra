@@ -8,7 +8,7 @@ locals {
       DB_USER                      = "directus"
       DB_SSL                       = "true"
       ADMIN_EMAIL                  = var.directus_admin_email
-      PUBLIC_URL                   = "https://ca-cms-${env}.${azurerm_container_app_environment.main.default_domain}"
+      PUBLIC_URL                   = "https://ca-cms-${env}.${module.container_platform.environment_default_domain}"
       STORAGE_LOCATIONS            = "azure"
       STORAGE_AZURE_DRIVER         = "azure"
       STORAGE_AZURE_CONTAINER_NAME = "media-${env}"
@@ -41,7 +41,7 @@ module "cms" {
 
   name                         = "ca-cms-${each.key}"
   resource_group_name          = azurerm_resource_group.main.name
-  container_app_environment_id = azurerm_container_app_environment.main.id
+  container_app_environment_id = module.container_platform.environment_id
   identity_id                  = azurerm_user_assigned_identity.app["cms-${each.key}"].id
   image                        = var.directus_image
   port                         = 8055

@@ -4,7 +4,7 @@ module "website" {
 
   name                         = "ca-website-${each.key}"
   resource_group_name          = azurerm_resource_group.main.name
-  container_app_environment_id = azurerm_container_app_environment.main.id
+  container_app_environment_id = module.container_platform.environment_id
   identity_id                  = azurerm_user_assigned_identity.app["website-${each.key}"].id
   image                        = var.images[each.key]
   port                         = 3000

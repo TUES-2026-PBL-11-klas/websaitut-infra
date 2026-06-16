@@ -45,3 +45,11 @@ module "database" {
   tags                = merge(local.common_tags, { environment = "shared" })
 }
 
+module "container_platform" {
+  source                   = "./modules/container_platform"
+  resource_group_name      = azurerm_resource_group.main.name
+  location                 = azurerm_resource_group.main.location
+  infrastructure_subnet_id = module.networking.apps_subnet_id
+  tags                     = merge(local.common_tags, { environment = "shared" })
+}
+
