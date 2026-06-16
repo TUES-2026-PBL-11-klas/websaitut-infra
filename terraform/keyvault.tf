@@ -1,5 +1,5 @@
 resource "azurerm_user_assigned_identity" "app" {
-  for_each            = toset(["cms-prod", "website-prod"])
+  for_each            = toset([])
   name                = "id-${each.key}"
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
@@ -18,13 +18,12 @@ module "key_vault" {
   subnet_id           = module.networking.endpoints_subnet_id
   vnet_id             = module.networking.vnet_id
 
-  principal_ids = merge(
-    { for k, v in azurerm_user_assigned_identity.app : k => v.principal_id },
-    {
-      "cms-staging"     = module.staging.cms_identity_principal_id
-      "website-staging" = module.staging.website_identity_principal_id
-    }
-  )
+  principal_ids = {
+    "cms-staging"     = module.staging.cms_identity_principal_id
+    "website-staging" = module.staging.website_identity_principal_id
+    "cms-prod"        = module.prod.cms_identity_principal_id
+    "website-prod"    = module.prod.website_identity_principal_id
+  }
 
   tags = merge(local.common_tags, { environment = "shared" })
 }
