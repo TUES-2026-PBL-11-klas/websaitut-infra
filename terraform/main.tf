@@ -6,10 +6,6 @@ resource "azurerm_resource_group" "main" {
 }
 
 locals {
-  # Shrinks as environments migrate into module "staging"/"prod" (Step 8/9).
-  # Drives the remaining flat for_each resources until Step 10 removes them.
-  environments = toset([])
-
   common_tags = {
     project    = "website"
     managed_by = "terraform"
@@ -36,17 +32,6 @@ module "networking" {
   tags                = merge(local.common_tags, { environment = "shared" })
 }
 
-module "database" {
-  source              = "./modules/database"
-  resource_group_name = azurerm_resource_group.main.name
-  location            = azurerm_resource_group.main.location
-  delegated_subnet_id = module.networking.postgres_subnet_id
-  vnet_id             = module.networking.vnet_id
-  admin_login         = "elsys_pgadmin"
-  admin_password      = data.azurerm_key_vault_secret.pg_admin_password.value
-  tags                = merge(local.common_tags, { environment = "shared" })
-}
-
 module "container_platform" {
   source                   = "./modules/container_platform"
   resource_group_name      = azurerm_resource_group.main.name
@@ -59,6 +44,52 @@ module "storage" {
   source              = "./modules/storage"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
+  tags                = merge(local.common_tags, { environment = "shared" })
+}
+
+module "key_vault" {
+  source              = "./modules/key_vault"
+  name                = "kv-elsys-website"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  tenant_id           = var.tenant_id
+  subnet_id           = module.networking.endpoints_subnet_id
+  vnet_id             = module.networking.vnet_id
+
+  principal_ids = {
+    "cms-staging"     = module.staging.cms_identity_principal_id
+    "website-staging" = module.staging.website_identity_principal_id
+    "cms-prod"        = module.prod.cms_identity_principal_id
+    "website-prod"    = module.prod.website_identity_principal_id
+  }
+
+  tags = merge(local.common_tags, { environment = "shared" })
+}
+
+# Shared secrets — bootstrapped externally, read via data sources
+data "azurerm_key_vault_secret" "pg_admin_password" {
+  name         = "pg-admin-password"
+  key_vault_id = module.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "ghcr_password" {
+  name         = "ghcr-password"
+  key_vault_id = module.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "storage_account_key" {
+  name         = "storage-account-key"
+  key_vault_id = module.key_vault.id
+}
+
+module "database" {
+  source              = "./modules/database"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  delegated_subnet_id = module.networking.postgres_subnet_id
+  vnet_id             = module.networking.vnet_id
+  admin_login         = "elsys_pgadmin"
+  admin_password      = data.azurerm_key_vault_secret.pg_admin_password.value
   tags                = merge(local.common_tags, { environment = "shared" })
 }
 
@@ -115,4 +146,3 @@ module "prod" {
 
   tags = merge(local.common_tags, { environment = "prod" })
 }
-
