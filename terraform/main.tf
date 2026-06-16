@@ -27,15 +27,10 @@ locals {
   }
 }
 
-resource "random_password" "pg_admin" {
-  length           = 32
-  special          = true
-  override_special = "!@#$%"
+module "networking" {
+  source              = "./modules/networking"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  tags                = merge(local.common_tags, { environment = "shared" })
 }
 
-resource "random_password" "staging" {
-  for_each         = toset(["directus-admin-password", "directus-key", "directus-secret", "directus-db-password"])
-  length           = 32
-  special          = true
-  override_special = "!@#$%"
-}

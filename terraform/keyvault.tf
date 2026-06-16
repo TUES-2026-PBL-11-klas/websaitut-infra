@@ -15,59 +15,71 @@ module "key_vault" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   tenant_id           = var.tenant_id
-  subnet_id           = azurerm_subnet.endpoints.id
-  vnet_id             = azurerm_virtual_network.main.id
+  subnet_id           = module.networking.endpoints_subnet_id
+  vnet_id             = module.networking.vnet_id
 
   principal_ids = {
     for k, v in azurerm_user_assigned_identity.app : k => v.principal_id
   }
 
-  secrets = {
-    "staging-directus-admin-password" = random_password.staging["directus-admin-password"].result
-    "staging-directus-key"            = random_password.staging["directus-key"].result
-    "staging-directus-secret"         = random_password.staging["directus-secret"].result
-    "staging-directus-db-password"    = random_password.staging["directus-db-password"].result
-    "prod-directus-admin-password"    = var.prod_directus_admin_password
-    "prod-directus-key"               = var.prod_directus_key
-    "prod-directus-secret"            = var.prod_directus_secret
-    "prod-directus-db-password"       = var.prod_directus_db_password
-    "pg-admin-password"               = random_password.pg_admin.result
-    "ghcr-password"                   = var.ghcr_password
-    "storage-account-key"             = azurerm_storage_account.media.primary_access_key
-  }
-
-  placeholder_secrets = {
-    "staging-directus-token" = "placeholder"
-    "prod-directus-token"    = "placeholder"
-  }
-
   tags = merge(local.common_tags, { environment = "shared" })
+}
+
+# Shared secrets — bootstrapped externally, read via data sources
+data "azurerm_key_vault_secret" "pg_admin_password" {
+  name         = "pg-admin-password"
+  key_vault_id = module.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "ghcr_password" {
+  name         = "ghcr-password"
+  key_vault_id = module.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "storage_account_key" {
+  name         = "storage-account-key"
+  key_vault_id = module.key_vault.id
+}
+
+# Per-env CMS secrets — bootstrapped externally, move to environment module in Step 8
+data "azurerm_key_vault_secret" "cms_admin_password" {
+  for_each     = local.environments
+  name         = "${each.key}-directus-admin-password"
+  key_vault_id = module.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "cms_db_password" {
+  for_each     = local.environments
+  name         = "${each.key}-directus-db-password"
+  key_vault_id = module.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "cms_key" {
+  for_each     = local.environments
+  name         = "${each.key}-directus-key"
+  key_vault_id = module.key_vault.id
+}
+
+data "azurerm_key_vault_secret" "cms_secret" {
+  for_each     = local.environments
+  name         = "${each.key}-directus-secret"
+  key_vault_id = module.key_vault.id
 }
 
 locals {
   cms_secret_ids = {
-    staging = {
-      "admin-password"            = module.key_vault.secret_ids["staging-directus-admin-password"]
-      "db-password"               = module.key_vault.secret_ids["staging-directus-db-password"]
-      "key"                       = module.key_vault.secret_ids["staging-directus-key"]
-      "secret"                    = module.key_vault.secret_ids["staging-directus-secret"]
-      "storage-azure-account-key" = module.key_vault.secret_ids["storage-account-key"]
-    }
-    prod = {
-      "admin-password"            = module.key_vault.secret_ids["prod-directus-admin-password"]
-      "db-password"               = module.key_vault.secret_ids["prod-directus-db-password"]
-      "key"                       = module.key_vault.secret_ids["prod-directus-key"]
-      "secret"                    = module.key_vault.secret_ids["prod-directus-secret"]
-      "storage-azure-account-key" = module.key_vault.secret_ids["storage-account-key"]
+    for env in local.environments : env => {
+      "admin-password"            = data.azurerm_key_vault_secret.cms_admin_password[env].versionless_id
+      "db-password"               = data.azurerm_key_vault_secret.cms_db_password[env].versionless_id
+      "key"                       = data.azurerm_key_vault_secret.cms_key[env].versionless_id
+      "secret"                    = data.azurerm_key_vault_secret.cms_secret[env].versionless_id
+      "storage-azure-account-key" = data.azurerm_key_vault_secret.storage_account_key.versionless_id
     }
   }
 
   website_secret_ids = {
-    staging = {
-      "ghcr-password" = module.key_vault.secret_ids["ghcr-password"]
-    }
-    prod = {
-      "ghcr-password" = module.key_vault.secret_ids["ghcr-password"]
+    for env in local.environments : env => {
+      "ghcr-password" = data.azurerm_key_vault_secret.ghcr_password.versionless_id
     }
   }
 }

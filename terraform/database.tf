@@ -7,7 +7,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "postgres" {
   name                  = "pdnslink-pg"
   resource_group_name   = azurerm_resource_group.main.name
   private_dns_zone_name = azurerm_private_dns_zone.postgres.name
-  virtual_network_id    = azurerm_virtual_network.main.id
+  virtual_network_id    = module.networking.vnet_id
 }
 
 resource "azurerm_postgresql_flexible_server" "main" {
@@ -23,11 +23,11 @@ resource "azurerm_postgresql_flexible_server" "main" {
   auto_grow_enabled             = true
   public_network_access_enabled = false
 
-  delegated_subnet_id = azurerm_subnet.postgres.id
+  delegated_subnet_id = module.networking.postgres_subnet_id
   private_dns_zone_id = azurerm_private_dns_zone.postgres.id
 
   administrator_login    = "elsys_pgadmin"
-  administrator_password = random_password.pg_admin.result
+  administrator_password = data.azurerm_key_vault_secret.pg_admin_password.value
 
   authentication {
     password_auth_enabled = true

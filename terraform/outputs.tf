@@ -17,15 +17,3 @@ output "keyvault_uri" {
   description = "Key Vault URI"
   value       = module.key_vault.vault_uri
 }
-
-output "pg_admin_password" {
-  description = "PostgreSQL admin password"
-  value       = random_password.pg_admin.result
-  sensitive   = true
-}
-
-output "staging_directus_db_password" {
-  description = "Staging Directus DB password (for PG role creation)"
-  value       = random_password.staging["directus-db-password"].result
-  sensitive   = true
-}

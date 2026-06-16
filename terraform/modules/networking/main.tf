@@ -1,16 +1,16 @@
-resource "azurerm_virtual_network" "main" {
+resource "azurerm_virtual_network" "this" {
   name                = "vnet-website"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = var.location
+  resource_group_name = var.resource_group_name
   address_space       = ["10.0.0.0/20"]
 
-  tags = merge(local.common_tags, { environment = "shared" })
+  tags = var.tags
 }
 
 resource "azurerm_subnet" "apps" {
   name                 = "snet-apps"
-  resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = ["10.0.2.0/23"]
 
   default_outbound_access_enabled = false
@@ -26,8 +26,8 @@ resource "azurerm_subnet" "apps" {
 
 resource "azurerm_subnet" "postgres" {
   name                 = "snet-postgres"
-  resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = ["10.0.0.0/28"]
 
   service_endpoints               = ["Microsoft.Storage"]
@@ -44,8 +44,8 @@ resource "azurerm_subnet" "postgres" {
 
 resource "azurerm_subnet" "endpoints" {
   name                 = "snet-endpoints"
-  resource_group_name  = azurerm_resource_group.main.name
-  virtual_network_name = azurerm_virtual_network.main.name
+  resource_group_name  = var.resource_group_name
+  virtual_network_name = azurerm_virtual_network.this.name
   address_prefixes     = ["10.0.4.0/28"]
 
   default_outbound_access_enabled = false

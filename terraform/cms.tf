@@ -8,7 +8,7 @@ locals {
       DB_USER                      = "directus"
       DB_SSL                       = "true"
       ADMIN_EMAIL                  = var.directus_admin_email
-      PUBLIC_URL                   = var.directus_public_urls[env]
+      PUBLIC_URL                   = "https://ca-cms-${env}.${azurerm_container_app_environment.main.default_domain}"
       STORAGE_LOCATIONS            = "azure"
       STORAGE_AZURE_DRIVER         = "azure"
       STORAGE_AZURE_CONTAINER_NAME = "media-${env}"

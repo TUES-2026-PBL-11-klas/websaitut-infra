@@ -62,23 +62,3 @@ resource "azurerm_private_endpoint" "this" {
     private_dns_zone_ids = [azurerm_private_dns_zone.this.id]
   }
 }
-
-resource "azurerm_key_vault_secret" "this" {
-  for_each     = var.secrets
-  name         = each.key
-  value        = each.value
-  key_vault_id = azurerm_key_vault.this.id
-  depends_on   = [time_sleep.rbac]
-}
-
-resource "azurerm_key_vault_secret" "placeholder" {
-  for_each     = var.placeholder_secrets
-  name         = each.key
-  value        = each.value
-  key_vault_id = azurerm_key_vault.this.id
-  depends_on   = [time_sleep.rbac]
-
-  lifecycle {
-    ignore_changes = [value]
-  }
-}
