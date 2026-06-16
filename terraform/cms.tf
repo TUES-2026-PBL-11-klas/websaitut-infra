@@ -12,7 +12,7 @@ locals {
       STORAGE_LOCATIONS            = "azure"
       STORAGE_AZURE_DRIVER         = "azure"
       STORAGE_AZURE_CONTAINER_NAME = "media-${env}"
-      STORAGE_AZURE_ACCOUNT_NAME   = azurerm_storage_account.media.name
+      STORAGE_AZURE_ACCOUNT_NAME   = module.storage.account_name
 CACHE_ENABLED                = "true"
       CACHE_AUTO_PURGE             = "true"
       CACHE_TTL                    = "5m"

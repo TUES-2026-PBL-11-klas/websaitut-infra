@@ -53,3 +53,10 @@ module "container_platform" {
   tags                     = merge(local.common_tags, { environment = "shared" })
 }
 
+module "storage" {
+  source              = "./modules/storage"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  tags                = merge(local.common_tags, { environment = "shared" })
+}
+
