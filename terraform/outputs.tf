@@ -10,7 +10,7 @@ output "website_fqdns" {
 
 output "postgres_fqdn" {
   description = "PostgreSQL server FQDN"
-  value       = azurerm_postgresql_flexible_server.main.fqdn
+  value       = module.database.server_fqdn
 }
 
 output "keyvault_uri" {

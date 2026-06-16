@@ -2,7 +2,7 @@ locals {
   cms_plain_env = {
     for env in local.environments : env => {
       DB_CLIENT                    = "pg"
-      DB_HOST                      = azurerm_postgresql_flexible_server.main.fqdn
+      DB_HOST                      = module.database.server_fqdn
       DB_PORT                      = "5432"
       DB_DATABASE                  = "directus-${env}"
       DB_USER                      = "directus"
