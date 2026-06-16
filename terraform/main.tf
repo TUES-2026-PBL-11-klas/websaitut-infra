@@ -6,7 +6,9 @@ resource "azurerm_resource_group" "main" {
 }
 
 locals {
-  environments = toset(["staging", "prod"])
+  # Shrinks as environments migrate into module "staging"/"prod" (Step 8/9).
+  # Drives the remaining flat for_each resources until Step 10 removes them.
+  environments = toset(["prod"])
 
   common_tags = {
     project    = "website"
@@ -58,5 +60,32 @@ module "storage" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   tags                = merge(local.common_tags, { environment = "shared" })
+}
+
+module "staging" {
+  source      = "./modules/environment"
+  environment = "staging"
+
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+
+  postgres_server_id                       = module.database.server_id
+  postgres_server_fqdn                     = module.database.server_fqdn
+  container_app_environment_id             = module.container_platform.environment_id
+  container_app_environment_default_domain = module.container_platform.environment_default_domain
+  storage_account_id                       = module.storage.account_id
+  storage_account_name                     = module.storage.account_name
+  key_vault_id                             = module.key_vault.id
+
+  app_config    = local.app_config["staging"]
+  cms_image     = var.directus_image
+  website_image = var.images["staging"]
+
+  directus_admin_email          = var.directus_admin_email
+  ghcr_username                 = var.ghcr_username
+  ghcr_password_secret_id       = data.azurerm_key_vault_secret.ghcr_password.versionless_id
+  storage_account_key_secret_id = data.azurerm_key_vault_secret.storage_account_key.versionless_id
+
+  tags = merge(local.common_tags, { environment = "staging" })
 }
 
