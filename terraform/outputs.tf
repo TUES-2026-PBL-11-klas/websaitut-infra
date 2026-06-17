@@ -19,7 +19,11 @@ output "postgres_fqdn" {
   value       = module.database.server_fqdn
 }
 
-output "keyvault_uri" {
-  description = "Key Vault URI"
-  value       = module.key_vault.vault_uri
+output "keyvault_uris" {
+  description = "Key Vault URIs per vault"
+  value = {
+    shared  = module.key_vault_shared.vault_uri
+    staging = module.key_vault_staging.vault_uri
+    prod    = module.key_vault_prod.vault_uri
+  }
 }

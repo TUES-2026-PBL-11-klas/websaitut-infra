@@ -55,9 +55,9 @@ module "storage" {
   tags                = merge(local.common_tags, { environment = "shared" })
 }
 
-module "key_vault" {
+module "key_vault_shared" {
   source              = "./modules/key_vault"
-  name                = "kv-elsys-website"
+  name                = "kv-elsys-shared"
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   tenant_id           = var.tenant_id
@@ -74,20 +74,52 @@ module "key_vault" {
   tags = merge(local.common_tags, { environment = "shared" })
 }
 
+module "key_vault_staging" {
+  source              = "./modules/key_vault"
+  name                = "kv-elsys-staging"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  tenant_id           = var.tenant_id
+  subnet_id           = module.networking.endpoints_subnet_id
+  private_dns_zone_id = module.networking.key_vault_private_dns_zone_id
+
+  principal_ids = {
+    "cms-staging" = module.staging.cms_identity_principal_id
+  }
+
+  tags = merge(local.common_tags, { environment = "staging" })
+}
+
+module "key_vault_prod" {
+  source              = "./modules/key_vault"
+  name                = "kv-elsys-prod"
+  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.main.location
+  tenant_id           = var.tenant_id
+  subnet_id           = module.networking.endpoints_subnet_id
+  private_dns_zone_id = module.networking.key_vault_private_dns_zone_id
+
+  principal_ids = {
+    "cms-prod" = module.prod.cms_identity_principal_id
+  }
+
+  tags = merge(local.common_tags, { environment = "prod" })
+}
+
 # Shared secrets — bootstrapped externally, read via data sources
 data "azurerm_key_vault_secret" "pg_admin_password" {
   name         = "pg-admin-password"
-  key_vault_id = module.key_vault.id
+  key_vault_id = module.key_vault_shared.id
 }
 
 data "azurerm_key_vault_secret" "ghcr_password" {
   name         = "ghcr-password"
-  key_vault_id = module.key_vault.id
+  key_vault_id = module.key_vault_shared.id
 }
 
 data "azurerm_key_vault_secret" "storage_account_key" {
   name         = "storage-account-key"
-  key_vault_id = module.key_vault.id
+  key_vault_id = module.key_vault_shared.id
 }
 
 module "database" {
@@ -114,7 +146,7 @@ module "staging" {
   container_app_environment_default_domain = module.container_platform.environment_default_domain
   storage_account_id                       = module.storage.account_id
   storage_account_name                     = module.storage.account_name
-  key_vault_id                             = module.key_vault.id
+  key_vault_id                             = module.key_vault_staging.id
 
   app_config    = local.app_config["staging"]
   cms_image     = var.directus_image
@@ -141,7 +173,7 @@ module "prod" {
   container_app_environment_default_domain = module.container_platform.environment_default_domain
   storage_account_id                       = module.storage.account_id
   storage_account_name                     = module.storage.account_name
-  key_vault_id                             = module.key_vault.id
+  key_vault_id                             = module.key_vault_prod.id
 
   app_config    = local.app_config["prod"]
   cms_image     = var.directus_image
