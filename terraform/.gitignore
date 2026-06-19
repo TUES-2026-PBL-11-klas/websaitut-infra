@@ -2,4 +2,11 @@
 *.tfstate
 *.tfstate.backup
 *.tfplan
-*.terraform.tfvars
+*.secret.tfvars
+backup*.json
+*.tar.gz
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf

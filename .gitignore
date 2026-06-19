@@ -1,14 +1,11 @@
 # Terraform
 **/.terraform/
-**/.terraform.lock.hcl
-terraform/*.tfstate
-terraform/*.tfstate.backup
-terraform/**/*.tfstate
-terraform/**/*.tfstate.backup
-terraform/*.tfplan
-terraform/**/*.tfplan
-terraform/*.secret.tfvars
-terraform/**/*.secret.tfvars
+**/*.tfstate
+**/*.tfstate.backup
+**/*.tfplan
+**/*.secret.tfvars
+**/backup*.json
+**/*.tar.gz
 
 # Editor
 .vscode/
