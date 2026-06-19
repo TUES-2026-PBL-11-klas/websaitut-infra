@@ -13,9 +13,9 @@ output "postgres_fqdn" {
   value       = module.database.server_fqdn
 }
 
-output "cicd_identity_client_ids" {
-  description = "Client IDs for CI/CD identities — feed into GitHub Actions OIDC"
-  value       = { for k, v in azurerm_user_assigned_identity.cicd : k => v.client_id }
+output "deploy_identity_client_ids" {
+  description = "Client IDs for CD identities — feed into GitHub environment secrets"
+  value       = { for k, v in azurerm_user_assigned_identity.deploy : k => v.client_id }
 }
 
 output "keyvault_uris" {
