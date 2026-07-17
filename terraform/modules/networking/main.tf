@@ -42,25 +42,3 @@ resource "azurerm_subnet" "postgres" {
   }
 }
 
-resource "azurerm_subnet" "endpoints" {
-  name                 = "snet-endpoints"
-  resource_group_name  = var.resource_group_name
-  virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = ["10.0.4.0/28"]
-
-  default_outbound_access_enabled = false
-}
-
-# Shared zone: every Key Vault instance's private endpoint links here,
-# so it must live in a singleton module, not inside key_vault itself.
-resource "azurerm_private_dns_zone" "key_vault" {
-  name                = "privatelink.vaultcore.azure.net"
-  resource_group_name = var.resource_group_name
-}
-
-resource "azurerm_private_dns_zone_virtual_network_link" "key_vault" {
-  name                  = "pdnslink-kv"
-  resource_group_name   = var.resource_group_name
-  private_dns_zone_name = azurerm_private_dns_zone.key_vault.name
-  virtual_network_id    = azurerm_virtual_network.this.id
-}

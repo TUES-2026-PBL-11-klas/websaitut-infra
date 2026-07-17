@@ -13,11 +13,3 @@ output "apps_subnet_id" {
 output "postgres_subnet_id" {
   value = azurerm_subnet.postgres.id
 }
-
-output "endpoints_subnet_id" {
-  value = azurerm_subnet.endpoints.id
-}
-
-output "key_vault_private_dns_zone_id" {
-  value = azurerm_private_dns_zone.key_vault.id
-}

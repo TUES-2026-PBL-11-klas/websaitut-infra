@@ -31,22 +31,3 @@ resource "time_sleep" "rbac" {
   depends_on      = [azurerm_role_assignment.admin, azurerm_role_assignment.secrets_user]
   create_duration = "60s"
 }
-
-resource "azurerm_private_endpoint" "this" {
-  name                = "pe-${var.name}"
-  location            = var.location
-  resource_group_name = var.resource_group_name
-  subnet_id           = var.subnet_id
-
-  private_service_connection {
-    name                           = "psc-${var.name}"
-    private_connection_resource_id = azurerm_key_vault.this.id
-    subresource_names              = ["vault"]
-    is_manual_connection           = false
-  }
-
-  private_dns_zone_group {
-    name                 = "kv-dns"
-    private_dns_zone_ids = [var.private_dns_zone_id]
-  }
-}

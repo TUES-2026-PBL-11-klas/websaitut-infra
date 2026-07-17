@@ -4,8 +4,6 @@ module "key_vault_shared" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   tenant_id           = var.tenant_id
-  subnet_id           = module.networking.endpoints_subnet_id
-  private_dns_zone_id = module.networking.key_vault_private_dns_zone_id
 
   # Every app identity gets read access to shared secrets (ghcr token,
   # storage account key, pg admin password bootstrap, etc.)
@@ -25,8 +23,6 @@ module "key_vault_env" {
   resource_group_name = azurerm_resource_group.main.name
   location            = azurerm_resource_group.main.location
   tenant_id           = var.tenant_id
-  subnet_id           = module.networking.endpoints_subnet_id
-  private_dns_zone_id = module.networking.key_vault_private_dns_zone_id
 
   principal_ids = {
     cms = azurerm_user_assigned_identity.cms[each.key].principal_id
