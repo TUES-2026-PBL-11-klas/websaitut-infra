@@ -109,3 +109,17 @@ resource "azurerm_container_app" "this" {
     ]
   }
 }
+
+# Hostname binding only. The managed certificate is created outside TF via
+# `az containerapp hostname bind` because azurerm has no resource for
+# Container Apps managed certificates; ignore_changes keeps TF from
+# unbinding the cert on the next apply (documented provider workaround).
+resource "azurerm_container_app_custom_domain" "this" {
+  for_each         = var.custom_domains
+  name             = each.value
+  container_app_id = azurerm_container_app.this.id
+
+  lifecycle {
+    ignore_changes = [certificate_binding_type, container_app_environment_certificate_id]
+  }
+}

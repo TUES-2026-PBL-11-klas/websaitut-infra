@@ -1,7 +1,7 @@
 locals {
   website_per_env = {
-    staging = { min_replicas = 0, image = var.images["staging"] }
-    prod    = { min_replicas = 1, image = var.images["prod"] }
+    staging = { min_replicas = 0, image = var.images["staging"], domain = "staging.elsys.website" }
+    prod    = { min_replicas = 1, image = var.images["prod"], domain = "elsys.website" }
   }
 }
 
@@ -29,6 +29,7 @@ module "website" {
   image                        = each.value.image
   port                         = 3000
   min_replicas                 = each.value.min_replicas
+  custom_domains               = [each.value.domain]
 
   plain_env = {
     DIRECTUS_URL = "http://ca-cms-${each.key}"

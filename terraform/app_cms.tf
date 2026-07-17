@@ -1,7 +1,7 @@
 locals {
   cms_per_env = {
-    staging = { min_replicas = 0 }
-    prod    = { min_replicas = 1 }
+    staging = { min_replicas = 0, domain = "directus.staging.elsys.website" }
+    prod    = { min_replicas = 1, domain = "directus.elsys.website" }
   }
 
   secret_names = {
@@ -55,16 +55,19 @@ module "cms" {
   image                        = var.directus_image
   port                         = 8055
   min_replicas                 = each.value.min_replicas
+  custom_domains               = [each.value.domain]
 
   plain_env = {
-    DB_CLIENT                    = "pg"
-    DB_HOST                      = module.database.server_fqdn
-    DB_PORT                      = "5432"
-    DB_DATABASE                  = azurerm_postgresql_flexible_server_database.cms[each.key].name
-    DB_USER                      = "directus"
-    DB_SSL                       = "true"
-    ADMIN_EMAIL                  = var.directus_admin_email
-    PUBLIC_URL                   = "https://ca-cms-${each.key}.${azurerm_container_app_environment.main.default_domain}"
+    DB_CLIENT   = "pg"
+    DB_HOST     = module.database.server_fqdn
+    DB_PORT     = "5432"
+    DB_DATABASE = azurerm_postgresql_flexible_server_database.cms[each.key].name
+    DB_USER     = "directus"
+    DB_SSL      = "true"
+    ADMIN_EMAIL = var.directus_admin_email
+    # Directus generates asset URLs and auth redirects from PUBLIC_URL — it
+    # must match the custom domain, not the *.azurecontainerapps.io FQDN.
+    PUBLIC_URL                   = "https://${each.value.domain}"
     STORAGE_LOCATIONS            = "azure"
     STORAGE_AZURE_DRIVER         = "azure"
     STORAGE_AZURE_CONTAINER_NAME = azurerm_storage_container.media[each.key].name

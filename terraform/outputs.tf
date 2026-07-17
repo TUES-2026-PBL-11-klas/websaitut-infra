@@ -18,6 +18,16 @@ output "deploy_identity_client_ids" {
   value       = { for k, v in azurerm_user_assigned_identity.deploy : k => v.client_id }
 }
 
+output "cae_static_ip" {
+  description = "CAE ingress IP — target for apex A records"
+  value       = azurerm_container_app_environment.main.static_ip_address
+}
+
+output "custom_domain_verification_id" {
+  description = "Value for the asuid.<host> TXT records that prove domain ownership"
+  value       = azurerm_container_app_environment.main.custom_domain_verification_id
+}
+
 output "keyvault_uris" {
   description = "Key Vault URIs per vault"
   value = merge(

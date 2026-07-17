@@ -22,10 +22,20 @@ resource "azurerm_federated_identity_credential" "github_actions" {
   subject                   = "repo:${var.github_repo}:environment:${each.value}"
 }
 
-resource "azurerm_role_assignment" "deploy_contributor" {
+# CI/CD only runs `az containerapp update --image`, so each deploy identity
+# gets Container Apps Contributor scoped to its own env's two apps — staging
+# can't touch prod, and nobody gets near KV/DB/storage.
+resource "azurerm_role_assignment" "deploy_website" {
   for_each             = local.deploy_envs
-  scope                = azurerm_resource_group.main.id
-  role_definition_name = "Contributor"
+  scope                = module.website[each.key].id
+  role_definition_name = "Container Apps Contributor"
+  principal_id         = azurerm_user_assigned_identity.deploy[each.key].principal_id
+}
+
+resource "azurerm_role_assignment" "deploy_cms" {
+  for_each             = local.deploy_envs
+  scope                = module.cms[each.key].id
+  role_definition_name = "Container Apps Contributor"
   principal_id         = azurerm_user_assigned_identity.deploy[each.key].principal_id
 }
 
