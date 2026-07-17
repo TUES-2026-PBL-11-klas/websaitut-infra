@@ -1,2 +1,22 @@
-# Do not commit actual secrets
-# secret.yaml files are placeholders — real values come from Vault
+# Terraform
+**/.terraform/
+**/*.tfstate
+**/*.tfstate.backup
+**/*.tfplan
+**/*.secret.tfvars
+**/backup*.json
+**/*.tar.gz
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
