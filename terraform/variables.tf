@@ -14,6 +14,18 @@ variable "pg_admin_password" {
   description = "PostgreSQL admin password. Provide via TF_VAR_pg_admin_password or a gitignored *.secret.tfvars; KV holds the source-of-truth copy. Only consumed on server (re)creation — see ignore_changes in the database module."
 }
 
+variable "kv_firewall_enabled" {
+  type        = bool
+  default     = false
+  description = "When true, locks the Key Vault data plane to the CAE egress IP (+ kv_extra_allowed_ips). Keep false until the egress IP is verified against a live app, then flip and apply."
+}
+
+variable "kv_extra_allowed_ips" {
+  type        = list(string)
+  default     = []
+  description = "Extra IPs allowed on the KV data plane (e.g. an admin IP during secret rotation). Steady state stays []."
+}
+
 variable "location" {
   type        = string
   default     = "polandcentral"

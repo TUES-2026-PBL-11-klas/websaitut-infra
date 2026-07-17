@@ -11,6 +11,16 @@ resource "azurerm_key_vault" "this" {
   soft_delete_retention_days    = 7
   purge_protection_enabled      = false
 
+  # Data-plane firewall. Empty allowed_ips keeps the vault open (Allow);
+  # a non-empty list flips to Deny with only those IPs permitted. Apps
+  # reach the vault from the CAE egress IP; bypass lets trusted Azure
+  # services (and portal-side operations) through.
+  network_acls {
+    default_action = length(var.allowed_ips) > 0 ? "Deny" : "Allow"
+    bypass         = "AzureServices"
+    ip_rules       = var.allowed_ips
+  }
+
   tags = var.tags
 }
 

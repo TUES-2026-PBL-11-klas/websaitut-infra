@@ -14,6 +14,12 @@ variable "tenant_id" {
   type = string
 }
 
+variable "allowed_ips" {
+  type        = list(string)
+  description = "Data-plane firewall allowlist (IPs/CIDRs). Empty keeps the vault open (default_action Allow)."
+  default     = []
+}
+
 variable "principal_ids" {
   type        = map(string)
   description = "Map of label => principal_id granted Key Vault Secrets User"
