@@ -8,6 +8,12 @@ variable "tenant_id" {
   description = "Azure AD tenant ID"
 }
 
+variable "pg_admin_password" {
+  type        = string
+  sensitive   = true
+  description = "PostgreSQL admin password. Provide via TF_VAR_pg_admin_password or a gitignored *.secret.tfvars; KV holds the source-of-truth copy. Only consumed on server (re)creation — see ignore_changes in the database module."
+}
+
 variable "location" {
   type        = string
   default     = "polandcentral"

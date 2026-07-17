@@ -35,5 +35,12 @@ resource "azurerm_postgresql_flexible_server" "this" {
 
   tags = var.tags
 
+  # Password is set once at creation and rotated out-of-band (KV holds the
+  # source of truth). var.admin_password only feeds a rebuild, so ignore
+  # in-place drift.
+  lifecycle {
+    ignore_changes = [administrator_password]
+  }
+
   depends_on = [azurerm_private_dns_zone_virtual_network_link.this]
 }

@@ -12,18 +12,6 @@ locals {
   }
 }
 
-module "secrets" {
-  source       = "./modules/secrets"
-  for_each     = module.key_vault_env
-  key_vault_id = each.value.id
-  names        = local.secret_names
-}
-
-data "azurerm_key_vault_secret" "storage_account_key" {
-  name         = "storage-account-key"
-  key_vault_id = module.key_vault_shared.id
-}
-
 resource "azurerm_user_assigned_identity" "cms" {
   for_each            = local.cms_per_env
   name                = "id-cms-${each.key}"
@@ -84,13 +72,19 @@ module "cms" {
     TELEMETRY                    = "false"
   }
 
-  secrets = {
-    "admin-password"            = module.secrets[each.key].versionless_ids["admin-password"]
-    "db-password"               = module.secrets[each.key].versionless_ids["db-password"]
-    "key"                       = module.secrets[each.key].versionless_ids["key"]
-    "secret"                    = module.secrets[each.key].versionless_ids["secret"]
-    "storage-azure-account-key" = data.azurerm_key_vault_secret.storage_account_key.versionless_id
-  }
+  # Reference secrets by constructed URI (control-plane attribute, no
+  # data-plane read) so TF never touches the vault firewall. The container
+  # app resolves the value at runtime via its UAMI. versionless_id == a
+  # trailing-slash vault_uri + "secrets/<name>".
+  secrets = merge(
+    {
+      for logical, kv_name in local.secret_names :
+      logical => "${module.key_vault_env[each.key].vault_uri}secrets/${kv_name}"
+    },
+    {
+      "storage-azure-account-key" = "${module.key_vault_shared.vault_uri}secrets/storage-account-key"
+    }
+  )
 
   secret_env = {
     DB_PASSWORD               = "db-password"

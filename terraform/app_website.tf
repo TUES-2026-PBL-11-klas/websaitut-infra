@@ -5,11 +5,6 @@ locals {
   }
 }
 
-data "azurerm_key_vault_secret" "ghcr_password" {
-  name         = "ghcr-password"
-  key_vault_id = module.key_vault_shared.id
-}
-
 resource "azurerm_user_assigned_identity" "website" {
   for_each            = local.website_per_env
   name                = "id-website-${each.key}"
@@ -36,7 +31,7 @@ module "website" {
   }
 
   secrets = {
-    "ghcr-password" = data.azurerm_key_vault_secret.ghcr_password.versionless_id
+    "ghcr-password" = "${module.key_vault_shared.vault_uri}secrets/ghcr-password"
   }
 
   registry = {
