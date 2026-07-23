@@ -46,8 +46,6 @@ terraform/
     └── container_app/   # преизползваем Container App (probes, secrets, registry, домейни)
 ```
 
-Старите k3s папки (`apps/`, `infrastructure/`, `kustomizations/`, `jobs/`, `vault/`) са наследство и се архивират в Codeberg.
-
 ## CI/CD
 
 Образите се билдват в [приложението](https://github.com/TUES-2026-PBL-11-klas/websaitut) и се пушват в GHCR. Деплойът е `az containerapp update --image`, изпълняван от deploy identity на съответната среда през OIDC (без дълготрайни тайни в GitHub). Terraform има `ignore_changes` на image, за да не се бие с деплоите.
