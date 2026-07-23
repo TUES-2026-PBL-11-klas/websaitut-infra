@@ -36,7 +36,7 @@ Staging и prod се управляват от **един** state чрез `for_
 ## Структура
 
 ```
-terraform/
+live/                   # активната инфраструктура — тук работиш всекидневно
 ├── *.tf                 # root: RG, мрежа, платформа, база, vault-ове, приложения, identity-та
 ├── terraform.tfvars     # входни стойности (без тайни)
 └── modules/
@@ -44,6 +44,8 @@ terraform/
     ├── database/        # PostgreSQL Flexible Server
     ├── key_vault/       # Key Vault, RBAC и firewall
     └── container_app/   # преизползваем Container App (probes, secrets, registry, домейни)
+
+bootstrap/               # еднократно: създава state backend-а на live/ — виж bootstrap/README.md
 ```
 
 ## CI/CD
@@ -52,19 +54,21 @@ terraform/
 
 ## Тайни
 
-Стойностите се seed-ват ръчно в Key Vault (bootstrap). **Terraform не чете тайни** — реферира ги по конструиран URI, а приложенията ги резолват при рънтайм през своите managed identity-та. PostgreSQL admin паролата идва от `TF_VAR_pg_admin_password` (или gitignore-нат `*.secret.tfvars`).
+Стойностите се seed-ват ръчно в Key Vault при първоначално създаване. **Terraform не чете тайни** — реферира ги по конструиран URI, а приложенията ги резолват при рънтайм през своите managed identity-та. PostgreSQL admin паролата идва от `TF_VAR_pg_admin_password` (или gitignore-нат `*.secret.tfvars`).
 
 ## Как се пуска
 
+При чисто нов subscription, първо еднократно [`bootstrap/`](bootstrap/README.md) — създава state backend-а, преди `live/` да може да направи `init`.
+
 ```bash
-cd terraform
+cd live
 export TF_VAR_pg_admin_password="..."   # изважда се от Key Vault
 terraform init
 terraform plan
 terraform apply
 ```
 
-State-ът се пази в Azure Storage backend (`rg-tfstate/elsystfstate`).
+State-ът се пази в Azure Storage backend (`rg-tfstate/elsystfstate`), създаден от `bootstrap/`.
 
 ## Предстои
 

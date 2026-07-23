@@ -116,7 +116,7 @@ variable "startup_probe" {
 
 variable "custom_domains" {
   type        = set(string)
-  description = "Custom hostnames bound to the app. DNS (CNAME/A + asuid TXT) must exist before apply; the managed certificate is created afterwards via `az containerapp hostname bind` (see terraform/README.md)."
+  description = "Custom hostnames bound to the app. DNS (CNAME/A + asuid TXT) must exist before apply; the managed certificate is created afterwards via `az containerapp hostname bind` (see the root README.md)."
   default     = []
 }
 
