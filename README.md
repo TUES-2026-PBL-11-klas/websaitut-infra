@@ -1,8 +1,4 @@
-<div align="center">
-
 # websaitut-infra
-
-**Това е Terraform конфигурацията** за инфраструктурата на уебсайта на ТУЕС върху Microsoft Azure. Едно `terraform apply` описва цялата платформа: контейнер приложенията, базата, тайните, мрежата и identity-тата за CI/CD.
 
 ![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=for-the-badge&logo=terraform&logoColor=white)
 ![Microsoft Azure](https://img.shields.io/badge/Microsoft_Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
@@ -12,13 +8,16 @@
 
 **[English](README.en.md) | Български**
 
-</div>
+---
 
-> **k3s конфигурацията е преместена.** Предишният GitOps стек (k3s + Flux, Traefik, Vault, VictoriaMetrics) вече живее и се архивира в [codeberg.org/rangelovkiril/tues-website-infra](https://codeberg.org/rangelovkiril/tues-website-infra). Това хранилище е само за Azure инфраструктурата.
+Това е Terraform конфигурацията за инфраструктурата на уебсайта на ТУЕС върху Microsoft Azure. Едно `terraform apply` описва цялата платформа: контейнер приложенията, базата, тайните, мрежата и identity-тата за CI/CD.
+
+> [!NOTE] 
+> Сайтът е разработван като проект по проектно-базираното обучение в ТУЕС и първоначално беше deploy-нат на самостоятелно администриран k3s клъстър — с Flux за GitOps, Traefik, Vault и VictoriaMetrics. Тази конфигурация е архивирана на [Codeberg](https://codeberg.org/rangelovkiril/tues-website-infra). Настоящото хранилище съдържа наследника ѝ — управляваната чрез Terraform Azure инфраструктура.
 
 ## Архитектура
 
-<!-- Диаграмата ще бъде добавена тук -->
+![Архитектурна диаграма](docs/architecture-diagram.png)
 
 ## Стек
 

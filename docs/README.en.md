@@ -1,8 +1,4 @@
-<div align="center">
-
 # websaitut-infra
-
-**This is the Terraform configuration** for the TUES website infrastructure on Microsoft Azure. A single `terraform apply` describes the whole platform: the container apps, the database, the secrets, the network, and the CI/CD identities.
 
 ![Terraform](https://img.shields.io/badge/Terraform-844FBA?style=for-the-badge&logo=terraform&logoColor=white)
 ![Microsoft Azure](https://img.shields.io/badge/Microsoft_Azure-0078D4?style=for-the-badge&logo=microsoftazure&logoColor=white)
@@ -12,13 +8,16 @@
 
 **English | [Български](README.md)**
 
-</div>
+---
 
-> **The k3s configuration has moved.** The previous GitOps stack (k3s + Flux, Traefik, Vault, VictoriaMetrics) now lives on and is archived at [codeberg.org/rangelovkiril/tues-website-infra](https://codeberg.org/rangelovkiril/tues-website-infra). This repository is Azure infrastructure only.
+This is the Terraform configuration for the TUES website infrastructure on Microsoft Azure. A single `terraform apply` describes the whole platform: the container apps, the database, the secrets, the network, and the CI/CD identities.
+
+> [NOTE]
+> The site was built as a project-based learning project at TUES, and was originally deployed on a self-managed k3s cluster — with Flux for GitOps, Traefik, Vault, and VictoriaMetrics. That configuration is archived at [Codeberg](https://codeberg.org/rangelovkiril/tues-website-infra). This repository holds its successor — the Terraform-managed Azure infrastructure.
 
 ## Architecture
 
-<!-- Diagram goes here -->
+![Architecture diagram](docs/architecture-diagram.png)
 
 ## Stack
 
