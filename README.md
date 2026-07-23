@@ -10,6 +10,8 @@
 ![Directus](https://img.shields.io/badge/Directus-6644FF?style=for-the-badge&logo=directus&logoColor=white)
 ![License: MIT](https://img.shields.io/github/license/TUES-2026-PBL-11-klas/websaitut-infra?style=for-the-badge&color=green)
 
+**[English](README.en.md) | Български**
+
 </div>
 
 > **k3s конфигурацията е преместена.** Предишният GitOps стек (k3s + Flux, Traefik, Vault, VictoriaMetrics) вече живее и се архивира в [codeberg.org/rangelovkiril/tues-website-infra](https://codeberg.org/rangelovkiril/tues-website-infra). Това хранилище е само за Azure инфраструктурата.
